@@ -1,0 +1,18 @@
+{
+  "name": "saucedemo-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "report": "playwright show-report",
+    "test:report": "playwright test && playwright show-report"
+  },
+  "keywords": [],
+  "author": "Filip Gajdos",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1"
+  }
+}
