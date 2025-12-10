@@ -1,10 +1,18 @@
 
 # Playwright
-node_modules/
+/node_modules/
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
 /.vscode/
-/result.json
+/package-lock.json
+/.env
+/results.json
+/.auth
+/allure-report
+/allure-results
+playwright.db
+README.md
+/auth.setup.ts

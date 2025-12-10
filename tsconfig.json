@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
@@ -11,13 +12,19 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["tests/*"]
-    }
+       "@/*": ["src/*"],                
+      },
+    //"types": ["node", "@playwright/test"],
   },
   "include": [
-    "./playwright.config.ts",
-    "./tests/**/*",
-    "./fixtures/**/*",
-    "./**/*.ts"
+    "src/**/*",
+    "tests/**/*",
+    "playwright.config.ts"
   ]
+  // "include": [
+  //   "./playwright.config.ts",
+  //   "./tests/**/*",
+  //   "./fixtures/**/*",
+  //   "./**/*.ts"
+  // ]
 }

@@ -1,11 +1,17 @@
 {
   "name": "saucedemo-e2e",
   "version": "1.0.0",
-  "description": "",
+  "description": "Playwright project to test www.saucedemo.com",
   "main": "index.js",
   "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke --project=chromium",
     "report": "playwright show-report",
     "test:report": "playwright test && playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnnyForever/saucedemo-playwright-e2e"
   },
   "keywords": [],
   "author": "Filip Gajdos",
@@ -13,6 +19,12 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "@types/node": "^24.10.1"
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.10.1",
+    "allure-playwright": "^3.4.3",
+    "dotenv": "^17.2.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.5.0"
   }
 }

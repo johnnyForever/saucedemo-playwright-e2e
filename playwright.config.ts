@@ -1,42 +1,50 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default defineConfig({
+  //globalSetup: './global-setup',
   testDir: './tests',
-  testMatch: ['**/*.ts', '**/*.spec.ts'],
+ // testMatch: ['**/e2e/*.ts'],
+ testMatch: ['**/**/*.ts'],
+  //testMatch: ['global-setup.ts'],
   fullyParallel: true,
-  
-  //retries: process.env.CI ? 2 : 0,
   reporter: [
-    ['html', { open: 'never' }],
+    ['html', { open: 'always' }],
     ['json', { outputFile: 'results.json' }],
+    //['allure-playwright'],
+    //[SQLiteReporter, { dbPath: './test-results/test-results.db' }],
     ['list', { printSteps: true }],
   ],
 
   use: {
     baseURL: 'https://www.saucedemo.com/',
-    headless: false,
+    testIdAttribute: 'data-test',
+    headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 5_000,
     navigationTimeout: 10_000,
     video: 'on-first-retry',
-    trace: 'on-first-retry',
+    trace: 'on',
     screenshot: 'only-on-failure',
   },
 
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'edge',
-      use: { ...devices['Desktop Edge'] },
-    },
-  ],
+      use: { ...devices['Desktop Chrome'],
+       },
+      }]
+  //   {
+  //     name: 'firefox',
+  //     use: { ...devices['Desktop Firefox'] },
+  //   },
+  //   {
+  //     name: 'edge',
+  //     use: { ...devices['Desktop Edge'] },
+  //   },
+  // ],
 //   webServer: {
 //   command: 'npm run start',
 //   url: 'http://localhost:3000',
