@@ -1,7 +1,7 @@
 {
   "name": "saucedemo-e2e",
   "version": "1.0.0",
-  "description": "Playwright project to test www.saucedemo.com",
+  "description": "Playwright project for www.saucedemo.com",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
@@ -14,7 +14,7 @@
     "url": "https://github.com/johnnyForever/saucedemo-playwright-e2e"
   },
   "keywords": [],
-  "author": "Filip Gajdos",
+  "author": "Filip",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {

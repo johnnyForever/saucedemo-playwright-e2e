@@ -1,18 +1,24 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '@/pages/loginPage';
+import { LoginPage } from '@/pages/login-page';
 import { DashboardPage } from '@/pages/dashboard';
+import { ProductDetails } from '@/pages/products-details';
 
 type PagesFixture = {
   loginPage: LoginPage;
   dashboardPage: DashboardPage;
+  productDetails: ProductDetails;
 };
 
-export const pages = base.extend<PagesFixture>({
+export const test = base.extend<PagesFixture>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
 
-  dashboardPage: async ({ page }, use) => {
-    await use(new DashboardPage(page));
+   dashboardPage: async ({ page }, use) => {
+     await use(new DashboardPage(page));
+   },
+
+  productDetails: async ({ page }, use) => {
+    await use(new ProductDetails(page));
   },
 });

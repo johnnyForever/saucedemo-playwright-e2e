@@ -1,7 +1,8 @@
 import { mergeTests } from '@playwright/test';
-import { pages } from '@/fixtures/pages';
-import { loggedIn } from '@/fixtures/loggedIn';
-import { loginErrorMessage } from '@/fixtures/loginError';
+import { test as pages } from '@/fixtures/pages';
+import { test as loggedIn } from '@/fixtures/logged-in';
+import { test as loginError } from '@/fixtures/login-error';
 
-export const test = mergeTests(pages, loginErrorMessage, loggedIn);
-export { expect } from '@playwright/test';
+export const test = mergeTests(loggedIn, loginError, pages);
+
+export { expect} from '@playwright/test';

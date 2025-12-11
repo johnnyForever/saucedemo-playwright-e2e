@@ -1,6 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect} from '@playwright/test';
-import { hexToRgb } from '@/utils/hexToRgb';
+import { hexToRgb } from '@/utils/hex-to-rgb';
 import elementText from '@/data/textations.json';
 import { colors } from '@/data/colors';
 
@@ -48,8 +48,7 @@ export class LoginPage {
     await expect(this.usernameField).toBeVisible();
     await expect(this.passwordField).toBeVisible();
     await expect(this.loginButton).toBeVisible();
-    //await expect(this.loginButton)
-    // .toBeEnabled();
+    await expect(this.loginButton).toBeEnabled();
     await expect.soft(this.loginButton).toHaveAttribute('value', elementText.login_button);
     await expect.soft(this.loginButton).toHaveCSS('background-color', hexToRgb(colors.eucalyptus));
   }

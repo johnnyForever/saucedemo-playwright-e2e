@@ -13,5 +13,5 @@
 /.auth
 /allure-report
 /allure-results
-playwright.db
 /auth.setup.ts
+/.prettierrc

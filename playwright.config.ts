@@ -5,9 +5,11 @@ dotenv.config();
 
 export default defineConfig({
   //globalSetup: './global-setup',
+  timeout: 70 * 1000,
+  globalTimeout: 10 * 60 * 1000,
   testDir: './tests',
  // testMatch: ['**/e2e/*.ts'],
- testMatch: ['**/**/*.ts'],
+ testMatch: ['**/e2e/*.ts'],
   //testMatch: ['global-setup.ts'],
   fullyParallel: true,
   reporter: [

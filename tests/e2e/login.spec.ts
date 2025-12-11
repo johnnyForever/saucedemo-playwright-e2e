@@ -1,8 +1,9 @@
 import { test, expect } from '@/index';
 import elementText from '@/data/textations.json';
-import { loadUsers } from '@/db/exportUsers';
+import { loadUsers } from '@/db/export-users';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
+const testText = '1234*/-+Test.,?ABC@[]56789';
 
 activeUsers.forEach((user) => {
   test.describe('Login successfully with all active users', () => {
@@ -10,13 +11,13 @@ activeUsers.forEach((user) => {
       username: user.username,
       password: user.password,
     });
-      test.skip(`Login successfully to saucedemo with ${user.username}`, async ({ loggedIn}) => {
-        await loggedIn.verifyDashboard()
+    test(`Login successfully to saucedemo with ${user.username}`, async ({ loggedIn }) => {
+      await loggedIn.verifyDashboard()
     });
   });
 });
 
-test.skip('Successfull login works @smoke', async ({loginPage, dashboardPage,}) => {
+test('Successfull login works', { tag: '@smoke' }, async ({ loginPage, dashboardPage }) => {
   await loginPage.openSaucedemoUrl();
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
@@ -25,9 +26,7 @@ test.skip('Successfull login works @smoke', async ({loginPage, dashboardPage,}) 
   await loginPage.page.reload({ waitUntil: 'networkidle' });
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
-  await loginPage.fillInLoginFields(
-    standardUser.username, 
-    standardUser.password);
+  await loginPage.fillInLoginFields(standardUser.username, standardUser.password);
   await loginPage.loginButton.click();
   await dashboardPage.verifyDashboard();
 
@@ -36,7 +35,7 @@ test.skip('Successfull login works @smoke', async ({loginPage, dashboardPage,}) 
   await dashboardPage.verifyDashboard();
 });
 
-test.skip('Login with missing password or username', async ({loginPage, loginErrorMsg, dashboardPage}) => {
+test('Login with missing password or username', async ({ loginPage, loginErrorMsg, dashboardPage }) => {
   await loginPage.openSaucedemoUrl();
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
@@ -66,15 +65,13 @@ test.skip('Login with missing password or username', async ({loginPage, loginErr
   await dashboardPage.verifyDashboard();
 });
 
-test.skip('Locked out and non existing user cannot login', async ({loginPage, loginErrorMsg}) => {
+test('Locked out and non existing user cannot login', async ({ loginPage, loginErrorMsg }) => {
   await loginPage.openSaucedemoUrl();
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
   // Locked out user cannot login and correct error is displayed
-  await loginPage.fillInLoginFields(
-    lockedUser.username,
-    lockedUser.password);
+  await loginPage.fillInLoginFields(lockedUser.username, lockedUser.password);
   await loginPage.clickLoginBtnAndVerifyApi();
   expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_locked_out_user)).toBe(true);
   await loginPage.verifyPageHeader();
@@ -97,18 +94,14 @@ test.skip('Locked out and non existing user cannot login', async ({loginPage, lo
   // Non existing user cannot login
   await loginPage.usernameField.clear();
   await loginPage.passwordField.clear();
-  await loginPage.fillInLoginFields(
-    nonExistingUser.username,
-    nonExistingUser.password);
+  await loginPage.fillInLoginFields(nonExistingUser.username, nonExistingUser.password);
   await loginPage.clickLoginBtnAndVerifyApi();
   expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_non_existing_user)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 });
 
-test.skip('Input special characters to username and password fields', async ({loginPage}) => {
-  let testText = '1234*/-+Test.,?';
-  
+test('Input special characters to username and password fields', async ({ loginPage }) => {
   await loginPage.openSaucedemoUrl();
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();

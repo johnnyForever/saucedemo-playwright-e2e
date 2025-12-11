@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { LoginPage } from '@/pages/loginPage';
+import { LoginPage } from '@/pages/login-page';
 
 type LoginErrorFixture = {
   loginErrorMsg: {
@@ -7,7 +7,7 @@ type LoginErrorFixture = {
   };
 };
 
-export const loginErrorMessage = base.extend<LoginErrorFixture>({
+export const test = base.extend<LoginErrorFixture>({
   loginErrorMsg: async ({ page }, use) => {
     const loginErrorPage = new LoginPage(page);
     await use({
@@ -17,11 +17,11 @@ export const loginErrorMessage = base.extend<LoginErrorFixture>({
           await loginErrorPage.verifyErrorIconsCount();
           await loginErrorPage.verifyErrorIconsVisibility();
           await loginErrorPage.verifyErrorbackgroundColor();
-          return true
+          return true;
         } catch {
-          return false
+          return false;
         }
-      }
+      },
     });
-  }
+  },
 });
