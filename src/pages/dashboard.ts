@@ -1,6 +1,6 @@
 import { expect, type Page, type Locator } from '@playwright/test';
-import elementText from '@/data/textations.json';
-import { selectSortFilter } from '@/utils/filterSelector';
+import { Labels } from '@/data/labels';
+import { FilterOptions } from '@/data/product-filter';
 import { productDashboardItem } from '@/locators/product-locators';
 
 export class DashboardPage {
@@ -16,25 +16,25 @@ export class DashboardPage {
     this.page = page;
     this.title = page.locator('.app_logo');
     this.shoppingCart = page.locator('#shopping_cart_container');
-    this.productsComponent = page.getByText(elementText.products_title);
+    this.productsComponent = page.getByText(Labels.productsTitle);
     this.products = productDashboardItem.productItem(page);
     this.productSortFilter = page.getByTestId('product-sort-container');
     this.selectedSortFilter = page.getByTestId('active-option');
   }
 
   async verifyDashboard() {
-    await expect.soft(this.title).toHaveText(elementText.page_header);
+    await expect.soft(this.title).toHaveText(Labels.pageHeader);
     await expect.soft(this.shoppingCart).toBeVisible();
     await expect.soft(this.productsComponent).toBeVisible();
     await expect.soft(this.page).toHaveURL(process.env.DASHBOARD_URL!);
   }
-  
+
   async countInventory(expected: number) {
     return await expect.soft(this.products).toHaveCount(expected);
   }
 
-  async selectSortFilter(filter: string) {
-     await this.productSortFilter.selectOption(selectSortFilter(filter))
-     await expect(this.selectedSortFilter).toHaveText(filter);
+  async selectSortFilter(filter: FilterOptions) {
+    await this.productSortFilter.selectOption(filter.element);
+    await expect(this.selectedSortFilter).toHaveText(filter.label);
   }
 }

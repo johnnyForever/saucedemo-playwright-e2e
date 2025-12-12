@@ -1,5 +1,5 @@
 import { test, expect } from '@/index';
-import elementText from '@/data/textations.json';
+import { Labels } from '@/data/labels';
 import { loadUsers } from '@/db/export-users';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
@@ -40,13 +40,13 @@ test('Login with missing password or username', async ({ loginPage, loginErrorMs
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
   await loginPage.loginButton.click();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_username_required)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorUsernameRequired)).toBe(true);
 
   // Login is not possible without password
   await loginPage.usernameField.fill(standardUser.username);
   await loginPage.loginButton.click();
   await loginPage.verifyLoginPageContent();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_password_required)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorPasswordRequired)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
@@ -55,7 +55,7 @@ test('Login with missing password or username', async ({ loginPage, loginErrorMs
   await loginPage.passwordField.fill(standardUser.password);
   await loginPage.loginButton.click();
   await loginPage.verifyLoginPageContent();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_username_required)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorUsernameRequired)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
@@ -73,7 +73,7 @@ test('Locked out and non existing user cannot login', async ({ loginPage, loginE
   // Locked out user cannot login and correct error is displayed
   await loginPage.fillInLoginFields(lockedUser.username, lockedUser.password);
   await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_locked_out_user)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorLockedOutUser)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
@@ -82,12 +82,12 @@ test('Locked out and non existing user cannot login', async ({ loginPage, loginE
   await loginPage.passwordField.clear();
   await loginPage.usernameField.fill(lockedUser.username);
   await loginPage.loginButton.click();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_password_required)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorPasswordRequired)).toBe(true);
 
   // Try to login second time with username and password
   await loginPage.passwordField.fill(lockedUser.password);
   await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_locked_out_user)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorLockedOutUser)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
@@ -96,7 +96,7 @@ test('Locked out and non existing user cannot login', async ({ loginPage, loginE
   await loginPage.passwordField.clear();
   await loginPage.fillInLoginFields(nonExistingUser.username, nonExistingUser.password);
   await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(elementText.error_non_existing_user)).toBe(true);
+  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorNonExistingUser)).toBe(true);
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 });

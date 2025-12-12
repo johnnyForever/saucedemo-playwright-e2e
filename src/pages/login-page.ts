@@ -1,8 +1,8 @@
 import type { Page, Locator } from '@playwright/test';
-import { expect} from '@playwright/test';
+import { expect } from '@playwright/test';
 import { hexToRgb } from '@/utils/hex-to-rgb';
-import elementText from '@/data/textations.json';
-import { colors } from '@/data/colors';
+import { Labels } from '@/data/labels';
+import { Colors } from '@/data/colors';
 
 export class LoginPage {
   readonly page: Page;
@@ -33,7 +33,7 @@ export class LoginPage {
   }
 
   async verifyPageHeader() {
-    await expect.soft(this.page).toHaveTitle(elementText.page_header);
+    await expect.soft(this.page).toHaveTitle(Labels.pageHeader);
   }
   
   async clickLoginBtnAndVerifyApi() {
@@ -49,8 +49,8 @@ export class LoginPage {
     await expect(this.passwordField).toBeVisible();
     await expect(this.loginButton).toBeVisible();
     await expect(this.loginButton).toBeEnabled();
-    await expect.soft(this.loginButton).toHaveAttribute('value', elementText.login_button);
-    await expect.soft(this.loginButton).toHaveCSS('background-color', hexToRgb(colors.eucalyptus));
+    await expect.soft(this.loginButton).toHaveAttribute('value', Labels.loginButton);
+    await expect.soft(this.loginButton).toHaveCSS('background-color', hexToRgb(Colors.eucalyptus));
   }
 
   async verifyErrorIconsCount(): Promise<void> {
@@ -58,7 +58,7 @@ export class LoginPage {
   }
 
   async verifyErrorbackgroundColor(): Promise<void> {
-    await expect(this.errorContainer).toHaveCSS('background-color',hexToRgb(colors.alizarinCrimson));
+    await expect(this.errorContainer).toHaveCSS('background-color',hexToRgb(Colors.alizarinCrimson));
   }
 
   async verifyErrorIconsVisibility(): Promise<void> {
