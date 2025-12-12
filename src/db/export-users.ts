@@ -1,5 +1,5 @@
-import SqliteDB from '@/db/sqlite';
-import { UserQueries } from '@/db/queries';
+import SqliteDB from '@/db/sqlite.ts';
+import { UserQueries } from '@/db/queries.ts';
 
 export function loadUsers() {
   const db = SqliteDB.getInstance();

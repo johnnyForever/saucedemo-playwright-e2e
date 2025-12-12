@@ -1,6 +1,6 @@
-import { test, expect } from '@/index';
-import { Labels } from '@/data/labels';
-import { loadUsers } from '@/db/export-users';
+import { test, expect } from '@/index.ts';
+import { Labels } from '@/data/labels.ts';
+import { loadUsers } from '@/db/export-users.ts';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
 const testText = '1234*/-+Test.,?ABC@[]56789';

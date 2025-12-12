@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
-import { productDashboardItem } from '@/locators/product-locators';;
-import { DashboardPage } from '@/pages/dashboard';
+import { productDashboardItem } from '@/locators/product-locators.ts';;
+import { DashboardPage } from '@/pages/dashboard.ts';
 
 type VerifyProductsFixture = {
   verifyAllProducts: () => Promise<void>;

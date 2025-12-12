@@ -1,7 +1,6 @@
-import type { Page, Locator } from '@playwright/test';
-import { expect } from '@playwright/test';
-import { ProductData } from '@/types/products';
-import { productDashboardItem, productDetailItem } from '@/locators/product-locators';
+import { expect, type Page, type Locator } from '@playwright/test';
+import { ProductData } from '@/types/products.ts';
+import { productDashboardItem, productDetailItem } from '@/locators/product-locators.ts';
 
 export class ProductDetails {
   readonly page: Page;

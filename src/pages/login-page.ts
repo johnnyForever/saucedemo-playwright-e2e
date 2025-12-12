@@ -1,8 +1,7 @@
-import type { Page, Locator } from '@playwright/test';
-import { expect } from '@playwright/test';
-import { hexToRgb } from '@/utils/hex-to-rgb';
-import { Labels } from '@/data/labels';
-import { Colors } from '@/data/colors';
+import { expect, type Page, type Locator } from '@playwright/test';
+import { hexToRgb } from '@/utils/hex-to-rgb.ts';
+import { Labels } from '@/data/labels.ts';
+import { Colors } from '@/data/colors.ts';
 
 export class LoginPage {
   readonly page: Page;
@@ -58,7 +57,7 @@ export class LoginPage {
   }
 
   async verifyErrorbackgroundColor(): Promise<void> {
-    await expect(this.errorContainer).toHaveCSS('background-color',hexToRgb(Colors.alizarinCrimson));
+    await expect(this.errorContainer).toHaveCSS('background-color', hexToRgb(Colors.alizarinCrimson));
   }
 
   async verifyErrorIconsVisibility(): Promise<void> {

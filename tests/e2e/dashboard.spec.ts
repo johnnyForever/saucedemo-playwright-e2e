@@ -1,29 +1,58 @@
-import { test } from '@/index';
-import { ProductData } from '@/types/products';
-import { SortProductsFilter } from '@/data/product-filter';
+import { test } from '@/index.ts';
+import { ProductData } from '@/types/products.ts';
+import { SortProductsFilter } from '@/data/product-filter.ts';
+import { sortProductData } from '@/utils/sort-products.ts';
 
-let productsData: ProductData[];
+test('Verify dashboard products with products detail',{ tag: '@smoke' }, async ({ 
+    loggedIn, dashboardPage, productDetails, exportAllProducts, verifyAllProducts }) => {
+  await loggedIn.verifyDashboard();
+  await verifyAllProducts();
+  await dashboardPage.countInventory(6);
 
-test('Verify dashboard products',{ tag: '@smoke' },
-  async ({ loggedIn, dashboardPage, productDetails, exportAllProducts, verifyAllProducts }) => {
-    await loggedIn.verifyDashboard();
-    await verifyAllProducts();
-    await dashboardPage.countInventory(6);
-    productsData = await exportAllProducts();
-    for (const [index, product] of productsData.entries()) {
-      test.step(`Extract product ${index}: ${product.name}`, async () => {});
-    }
-    await productDetails.verifyProductDetails(productsData);
+  // Export data of each product on main dashboard
+  const productsData: ProductData[] = await exportAllProducts();
+  for (const [index, product] of productsData.entries()) {
+    test.step(`Extracted product number ${index + 1}: 
+      name: ${product.name},
+      description: ${product.description},
+      price: ${product.price}`, async () => {});
+  }
+
+  // Compare data of each product from dashboard to what is displayed in detail
+  await productDetails.verifyProductDetails(productsData);
   }
 );
 
-test.only('Test', async ({ page, loggedIn, dashboardPage, productDetails }) => {
+test.only('Sorting of dashboard products with filter', async ({ 
+    loggedIn, dashboardPage, exportAllProducts}) => {
   await loggedIn.verifyDashboard();
-  // await page.locator('[data-test="product-sort-container"]').selectOption('za');
-  // await page.locator('[data-test="product-sort-container"]').selectOption('lohi');
-  await dashboardPage.selectSortFilter(SortProductsFilter.Za);
-  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
-  await dashboardPage.selectSortFilter(SortProductsFilter.LowToHigh);
+  let defaultData: ProductData[] = await exportAllProducts();
 
-  await loggedIn.verifyDashboard();
+  await dashboardPage.selectSortFilter(SortProductsFilter.Za);
+  defaultData = sortProductData(SortProductsFilter.Za, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
+  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.HighToLow);
+  defaultData = sortProductData(SortProductsFilter.HighToLow, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.LowToHigh);
+  defaultData = sortProductData(SortProductsFilter.LowToHigh, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
+  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.HighToLow);
+  defaultData = sortProductData(SortProductsFilter.HighToLow, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
+  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.verifyProductsSorting(defaultData);
 });

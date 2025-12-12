@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '@/pages/login-page';
-import { DashboardPage } from '@/pages/dashboard';
-import { loadUsers } from '@/db/export-users';
+import { LoginPage } from '@/pages/login-page.ts';
+import { DashboardPage } from '@/pages/dashboard.ts';
+import { loadUsers } from '@/db/export-users.ts';
 
 const { standardUser } = loadUsers();
 

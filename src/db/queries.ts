@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import { SauceDemoUser } from '@/types/users';
+import { SauceDemoUser } from '@/types/users.ts';
 
 export class UserQueries {
   private db: Database.Database;

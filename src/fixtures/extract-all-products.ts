@@ -1,7 +1,7 @@
 import { test as base, type Locator } from '@playwright/test';
-import { productDashboardItem } from '@/locators/product-locators';
-import { DashboardPage } from '@/pages/dashboard';
-import { ProductData } from '@/types/products';
+import { productDashboardItem } from '@/locators/product-locators.ts';
+import { DashboardPage } from '@/pages/dashboard.ts';
+import { ProductData } from '@/types/products.ts';
 
 type ExportProductsFixture = {
   exportAllProducts: () => Promise<ProductData[]>;

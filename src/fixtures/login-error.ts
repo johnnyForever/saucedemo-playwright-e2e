@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { LoginPage } from '@/pages/login-page';
+import { LoginPage } from '@/pages/login-page.ts';
 
 type LoginErrorFixture = {
   loginErrorMsg: {

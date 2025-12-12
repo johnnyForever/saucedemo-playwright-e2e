@@ -9,7 +9,7 @@ export default defineConfig({
   globalTimeout: 10 * 60 * 1000,
   testDir: './tests',
  // testMatch: ['**/e2e/*.ts'],
- testMatch: ['**/e2e/*.ts'],
+  testMatch: ['**/e2e/*.ts'],
   //testMatch: ['global-setup.ts'],
   fullyParallel: true,
   reporter: [
