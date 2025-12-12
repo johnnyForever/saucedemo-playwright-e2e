@@ -5,5 +5,6 @@
     "error_locked_out_user": "Epic sadface: Sorry, this user has been locked out.",
     "error_non_existing_user": "Epic sadface: Username and password do not match any user in this service",
     "page_header": "Swag Labs",
-    "products_title": "Products"
+    "products_title": "Products",
+    "add_to_cart_button": "add to cart"
 }

@@ -5,27 +5,30 @@ import { productDashboardItem, productDetailItem } from '@/locators/product-loca
 
 export class ProductDetails {
   readonly page: Page;
-  private readonly products: Locator
+  readonly products: Locator
+  readonly productDetail: Locator
 
   constructor(page: Page) {
     this.page = page;
-    this.products = productDashboardItem.product(page);
+    this.products = productDashboardItem.productItem(page);
+    this.productDetail = productDetailItem.productDetail(page);
   }
 
   async verifyProductDetails(productData: ProductData[]): Promise<void> {
     const count = await this.products.count();
     for (let i = 0; i < count; i++) {
-      const product = this.products.nth(i);
+      const product = await this.products.nth(i);
       await productDashboardItem.name(product).click();
 
-      const nameRecieved = await productDetailItem.name(this.page);
-      const descRecieved = await productDetailItem.description(this.page);
-      const priceRecieved = await productDetailItem.price(this.page);
+      const nameRecieved = await productDetailItem.name(this.productDetail);
+      const descRecieved = await productDetailItem.description(this.productDetail);
+      const priceRecieved = await productDetailItem.price(this.productDetail);
+      const addBtn = await productDetailItem.addToCart(this.productDetail).isVisible();
 
       await expect.soft(nameRecieved).toHaveText(productData[i].name);
       await expect.soft(descRecieved).toHaveText(productData[i].description);
       await expect.soft(priceRecieved).toHaveText(productData[i].price);
-
+      expect.soft(addBtn).toBe(true);
       await this.page.goBack();
     }
   }

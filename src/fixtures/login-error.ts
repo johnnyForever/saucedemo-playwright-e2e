@@ -13,7 +13,7 @@ export const test = base.extend<LoginErrorFixture>({
     await use({
       verifyErrorMessage: async (text: string) => {
         try {
-          await expect(page.getByText(text)).toBeVisible();
+          await expect.soft(page.getByText(text)).toBeVisible();
           await loginErrorPage.verifyErrorIconsCount();
           await loginErrorPage.verifyErrorIconsVisibility();
           await loginErrorPage.verifyErrorbackgroundColor();
