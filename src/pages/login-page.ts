@@ -27,19 +27,18 @@ export class LoginPage {
   }
 
   async fillInLoginFields(username: string, password: string) {
-     await this.usernameField.fill(username);
-     await this.passwordField.fill(password);
+    await this.usernameField.fill(username);
+    await this.passwordField.fill(password);
   }
 
   async verifyPageHeader() {
-    await expect.soft(this.page).toHaveTitle(Labels.pageHeader);
+    await expect.soft(this.page).toHaveTitle(Labels.elementLabels['pageHeader']);
   }
-  
+
   async clickLoginBtnAndVerifyApi() {
     await Promise.all([
-    this.page.waitForRequest(req => req.url().includes(process.env.TOKEN_EP!), 
-      { timeout: 10_000 }),
-      await this.loginButton.click()
+      this.page.waitForRequest((req) => req.url().includes(process.env.TOKEN_EP!), { timeout: 10_000 }),
+      await this.loginButton.click(),
     ]);
   }
 
@@ -48,7 +47,7 @@ export class LoginPage {
     await expect(this.passwordField).toBeVisible();
     await expect(this.loginButton).toBeVisible();
     await expect(this.loginButton).toBeEnabled();
-    await expect.soft(this.loginButton).toHaveAttribute('value', Labels.loginButton);
+    await expect.soft(this.loginButton).toHaveAttribute('value', Labels.elementLabels['loginButton']);
     await expect.soft(this.loginButton).toHaveCSS('background-color', hexToRgb(Colors.eucalyptus));
   }
 

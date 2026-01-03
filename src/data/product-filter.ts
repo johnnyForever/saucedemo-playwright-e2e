@@ -1,24 +1,20 @@
 export const SortProductsFilter = {
-  Az: {
+  az: {
     label: 'Name (A to Z)',
-    element: 'az',
+    elementAttribute: 'az',
   },
-  Za: {
+  za: {
     label: 'Name (Z to A)',
-    element: 'za',
+    elementAttribute: 'za',
   },
-  LowToHigh: {
+  lowToHigh: {
     label: 'Price (low to high)',
-    element: 'lohi',
+    elementAttribute: 'lohi',
   },
- HighToLow: {
+  highToLow: {
     label: 'Price (high to low)',
-    element: 'hilo',
+    elementAttribute: 'hilo',
   },
-}
+};
 
-export type FilterOptions = 
-  | typeof SortProductsFilter.Az
-  | typeof SortProductsFilter.Za
-  | typeof SortProductsFilter.LowToHigh
-  | typeof SortProductsFilter.HighToLow;
+export type FilterOptions = (typeof SortProductsFilter)[keyof typeof SortProductsFilter];

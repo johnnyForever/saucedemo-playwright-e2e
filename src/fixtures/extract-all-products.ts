@@ -1,36 +1,38 @@
 import { test as base, type Locator } from '@playwright/test';
-import { productDashboardItem } from '@/locators/product-locators.ts';
 import { DashboardPage } from '@/pages/dashboard.ts';
 import { ProductData } from '@/types/products.ts';
+import { logAllProductData } from '@/utils/log-products-data.ts';
 
 type ExportProductsFixture = {
-  exportAllProducts: () => Promise<ProductData[]>;
+  productsData: ProductData[];
 };
 
 export const test = base.extend<ExportProductsFixture>({
-  exportAllProducts: async ({ page }, use) => {
+  productsData: async ({ page }, use) => {
     const dashboard = new DashboardPage(page);
-    
-    const exportProducts = async (): Promise<ProductData[]> => {
-      const productElements = await dashboard.products.all();
-      const products = await Promise.all(
-        productElements.map(async (product: Locator) => {
-          const name = await productDashboardItem.name(product).innerText();
-          const description = await productDashboardItem.description(product).innerText();
-          const priceText = await productDashboardItem.price(product).innerText();
-          const imageSrc = (await productDashboardItem.image(product).getAttribute('src')) || '';
 
-          return {
-            name: name.trim(),
-            description: description.trim(),
-            price: priceText.trim(),
-            priceValue: parseFloat(priceText.replace('$', '')),
-            imageSrc,
-          } as ProductData;
-        })
-      );
-      return products;
-    };
-    await use(exportProducts);
+    await dashboard.productsItems.first().waitFor({ state: 'visible', timeout: 10000 });
+    const productElements = await dashboard.productsItems.all();
+
+    const products: ProductData[] = await Promise.all(
+      productElements.map(async (product: Locator, index: number) => {
+        const productItem = dashboard.getProductItem(index);
+
+        const name = await productItem.name.innerText();
+        const description = await productItem.description.innerText();
+        const price = await productItem.price.innerText();
+        const imageSrc = await productItem.image.getAttribute('src');
+        return {
+          name: name.trim(),
+          description: description.trim(),
+          price: price.trim(),
+          priceValue: parseFloat(price.replace('$', '').trim()),
+          imageSrc: imageSrc?.trim(),
+        } as ProductData;
+      })
+    );
+    logAllProductData(products);
+
+    await use(products);
   },
 });

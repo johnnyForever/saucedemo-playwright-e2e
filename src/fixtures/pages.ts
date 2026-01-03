@@ -1,12 +1,12 @@
 import { test as base } from '@playwright/test';
 import { LoginPage } from '@/pages/login-page.ts';
 import { DashboardPage } from '@/pages/dashboard.ts';
-import { ProductDetails } from '@/pages/products-details.ts';
+import { ProductDetailPage } from '@/pages/products-detail.ts';
 
 type PagesFixture = {
   loginPage: LoginPage;
   dashboardPage: DashboardPage;
-  productDetails: ProductDetails;
+  productDetailPage: ProductDetailPage;
 };
 
 export const test = base.extend<PagesFixture>({
@@ -18,7 +18,7 @@ export const test = base.extend<PagesFixture>({
      await use(new DashboardPage(page));
    },
 
-  productDetails: async ({ page }, use) => {
-    await use(new ProductDetails(page));
+  productDetailPage: async ({ page }, use) => {
+    await use(new ProductDetailPage(page));
   },
 });

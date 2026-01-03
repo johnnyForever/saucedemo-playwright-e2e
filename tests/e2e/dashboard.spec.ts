@@ -1,58 +1,70 @@
-import { test } from '@/index.ts';
+import { test, expect } from '@/index.ts';
 import { ProductData } from '@/types/products.ts';
 import { SortProductsFilter } from '@/data/product-filter.ts';
 import { sortProductData } from '@/utils/sort-products.ts';
+import { Labels } from '@/data/labels.ts';
 
-test('Verify dashboard products with products detail',{ tag: '@smoke' }, async ({ 
-    loggedIn, dashboardPage, productDetails, exportAllProducts, verifyAllProducts }) => {
-  await loggedIn.verifyDashboard();
-  await verifyAllProducts();
-  await dashboardPage.countInventory(6);
+test(
+  'Compare dashboard products with products details',
+  { tag: '@smoke' },
+  async ({ loggedIn, dashboardPage, productsData, verifyDashboardItems, verifyProductDetail }) => {
+    await loggedIn.verifyDashboard();
+    await verifyDashboardItems();
+    await dashboardPage.countInventory(6);
+    expect(productsData).toHaveLength(6);
 
-  // Export data of each product on main dashboard
-  const productsData: ProductData[] = await exportAllProducts();
-  for (const [index, product] of productsData.entries()) {
-    test.step(`Extracted product number ${index + 1}: 
-      name: ${product.name},
-      description: ${product.description},
-      price: ${product.price}`, async () => {});
-  }
-
-  // Compare data of each product from dashboard to what is displayed in detail
-  await productDetails.verifyProductDetails(productsData);
+    // Compare data of each product from dashboard to what is displayed in detail
+    await verifyProductDetail(productsData);
   }
 );
 
-test.only('Sorting of dashboard products with filter', async ({ 
-    loggedIn, dashboardPage, exportAllProducts}) => {
+test('Sorting of dashboard products with filter', async ({ loggedIn, dashboardPage, productsData }) => {
   await loggedIn.verifyDashboard();
-  let defaultData: ProductData[] = await exportAllProducts();
+  await dashboardPage.countInventory(6);
+  expect(productsData).toHaveLength(6);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.Za);
-  defaultData = sortProductData(SortProductsFilter.Za, defaultData)
+  let defaultData: ProductData[] = productsData;
+
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
-  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.za);
+  defaultData = await sortProductData(SortProductsFilter.za, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.HighToLow);
-  defaultData = sortProductData(SortProductsFilter.HighToLow, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.az);
+  defaultData = await sortProductData(SortProductsFilter.az, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.LowToHigh);
-  defaultData = sortProductData(SortProductsFilter.LowToHigh, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.highToLow);
+  defaultData = await sortProductData(SortProductsFilter.highToLow, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
-  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.lowToHigh);
+  defaultData = await sortProductData(SortProductsFilter.lowToHigh, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.HighToLow);
-  defaultData = sortProductData(SortProductsFilter.HighToLow, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.az);
+  defaultData = await sortProductData(SortProductsFilter.az, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
 
-  await dashboardPage.selectSortFilter(SortProductsFilter.Az);
-  defaultData = sortProductData(SortProductsFilter.Az, defaultData)
+  await dashboardPage.selectSortFilter(SortProductsFilter.highToLow);
+  defaultData = await sortProductData(SortProductsFilter.highToLow, defaultData);
   await dashboardPage.verifyProductsSorting(defaultData);
+
+  await dashboardPage.selectSortFilter(SortProductsFilter.az);
+  defaultData = await sortProductData(SortProductsFilter.az, defaultData);
+  await dashboardPage.verifyProductsSorting(defaultData);
+});
+
+test.only('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashboardItems }) => {
+  await loggedIn.verifyDashboard();
+  await dashboardPage.clickSidebarBtnAndVerify();
+
+  const products = await dashboardPage.getAllProductItems();
+  for (const product of products) {
+    await product.name.click();
+    await dashboardPage.clickSidebarBtnAndVerify();
+    await dashboardPage.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['allItems'] }).click();
+    await verifyDashboardItems();
+  }
 });

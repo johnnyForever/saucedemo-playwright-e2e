@@ -1,7 +1,7 @@
 {
   "name": "saucedemo-e2e-playwright-ts",
   "version": "1.0.0",
-  "description": "E2E Playwright test project for www.saucedemo.com + TypeScript",
+  "description": "E2E Playwright project for www.saucedemo.com + TypeScript",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
@@ -12,7 +12,7 @@
     "test:regression": "playwright test --grep @regression",
     "report": "playwright show-report",
     "test:report": "playwright test && playwright show-report",
-    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright && rm playwright.db"
+    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright || rm playwright.db"
   },
   "repository": {
     "type": "git",

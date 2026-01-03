@@ -1,18 +1,18 @@
-import type { Page, Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
+import { Labels } from '@/data/labels.ts';
 
-export const productDashboardItem = {
-  productItem: (page: Page): Locator => page.locator('.inventory_item'),
-  name: (productItem: Locator) => productItem.getByTestId('inventory-item-name'),
-  description: (productItem: Locator) => productItem.getByTestId('inventory-item-desc'),
-  price: (productItem: Locator) => productItem.getByTestId('inventory-item-price'),
-  image: (productItem: Locator) => productItem.locator('img.inventory_item_img'),
-  addToCart: (productItem: Locator) => productItem.locator('button:has-text("Add to cart")'),
-};
+export const productItem = (root: Locator) => ({
+  name: root.getByTestId('inventory-item-name'),
+  description: root.getByTestId('inventory-item-desc'),
+  price: root.getByTestId('inventory-item-price'),
+  image: root.locator('img.inventory_item_img'),
+  addToCart: root.locator(`button:has-text("${Labels.elementLabels['addToCartButton']}")`),
+});
 
-export const productDetailItem = {
-  productDetail: (page: Page): Locator => page.locator('.inventory_details'),
-  name: (productDetail: Locator): Locator => productDetail.locator('.inventory_details_name'),
-  description: (productDetail: Locator): Locator => productDetail.locator('.inventory_details_desc'),
-  price: (productDetail: Locator): Locator => productDetail.locator('.inventory_details_price'),
-  addToCart: (productDetail: Locator) => productDetail.locator('button:has-text("Add to cart")'),
-};
+export const productDetail = (root: Page) => ({
+  name: root.locator('.inventory_details_name'),
+  description: root.locator('.inventory_details_desc'),
+  price: root.locator('.inventory_details_price'),
+  image: root.locator('img.inventory_detail_img'),
+  addToCart: root.locator(`button:has-text("${Labels.elementLabels['addToCartButton']}")`),
+});
