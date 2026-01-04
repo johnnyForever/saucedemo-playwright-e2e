@@ -4,13 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  //globalSetup: './global-setup',
   timeout: 70 * 1000,
   globalTimeout: 10 * 60 * 1000,
   testDir: './tests',
- // testMatch: ['**/e2e/*.ts'],
   testMatch: ['**/e2e/*.ts'],
-  //testMatch: ['global-setup.ts'],
   fullyParallel: true,
   reporter: [
     ['html', { open: 'always' }],
@@ -33,23 +30,32 @@ export default defineConfig({
   },
 
   projects: [
+    // Desktop browsers
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'],
-       },
-      }]
-  //   {
-  //     name: 'firefox',
-  //     use: { ...devices['Desktop Firefox'] },
-  //   },
-  //   {
-  //     name: 'edge',
-  //     use: { ...devices['Desktop Edge'] },
-  //   },
-  // ],
-//   webServer: {
-//   command: 'npm run start',
-//   url: 'http://localhost:3000',
-//   reuseExistingServer: !process.env.CI,
-// },
+      use: { browserName: 'chromium' },
+    },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' },
+    },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit' },
+    },
+
+    // Mobile emulator
+    {
+      name: 'mobile chrome',
+      use: {
+        ...devices['Pixel 5'],
+        browserName: 'chromium',
+      },
+    },
+  ],
+  //   webServer: {
+  //   command: 'npm run start',
+  //   url: 'http://localhost:3000',
+  //   reuseExistingServer: !process.env.CI,
+  // },
 });

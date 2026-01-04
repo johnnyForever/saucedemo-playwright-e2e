@@ -3,28 +3,31 @@ import { Labels } from '@/data/labels.ts';
 import { ProductData } from '@/types/products.ts';
 import { FilterOptions } from '@/data/product-filter.ts';
 import { productItem } from '@/locators/product-locators.ts';
+import { Colors } from '@/data/colors.ts';
+import { hexToRgb } from '@/utils/hex-to-rgb.ts';
+import { SideBar } from '@/components/sidebar.ts';
 
-export class DashboardPage {
+export class DashboardPage{
   readonly page: Page;
+  readonly sidebar: SideBar;
   readonly title: Locator;
   readonly shoppingCart: Locator;
   readonly productsComponent: Locator;
   readonly productsItems: Locator;
   readonly productSortFilter: Locator;
   readonly selectedSortFilter: Locator;
-  readonly sidebarBurgerButton: Locator;
-  readonly sidebarBurgerItems: Locator;
+  readonly shoppingBasket: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.sidebar = new SideBar(page);
     this.title = page.locator('.app_logo');
     this.shoppingCart = page.locator('#shopping_cart_container');
     this.productsComponent = page.getByText(Labels.elementLabels['productsTitle']);
     this.productsItems = page.locator('.inventory_item'),
     this.productSortFilter = page.getByTestId('product-sort-container');
     this.selectedSortFilter = page.getByTestId('active-option');
-    this.sidebarBurgerButton = page.getByRole('button', { name: /Open Menu/i });
-    this.sidebarBurgerItems = page.locator('.bm-item-list').locator('a');
+    this.shoppingBasket = page.getByTestId('shopping-cart-link').getByTestId('shopping-cart-badge');
   }
 
   async verifyDashboard() {
@@ -38,17 +41,8 @@ export class DashboardPage {
     return await expect.soft(this.productsItems).toHaveCount(expected);
   }
 
-  async clickSidebarBtnAndVerify() {
-    await this.sidebarBurgerButton.click();
-    await expect(this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['allItems'] })).toBeVisible();
-    await expect(this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['about'] })).toBeVisible();
-    await expect(
-      this.sidebarBurgerItems.filter({
-        hasText: Labels.sidebarElLabels.about,
-      })
-    ).toHaveAttribute('href', process.env.ABOUT_URL!);
-    await expect(this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['logout'] })).toBeVisible();
-    await expect(this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['resetApp'] })).toBeVisible();
+  async clickShoppingBasket() {
+    await this.shoppingBasket.locator('..').click();
   }
 
   async selectSortFilter(filterOption: FilterOptions) {
@@ -65,6 +59,16 @@ export class DashboardPage {
       await expect.soft(product.name).toHaveText(expectedData.name, { timeout: 7000 });
       await expect.soft(product.description).toHaveText(expectedData.description, { timeout: 7000 });
       await expect.soft(product.price).toHaveText(expectedData.price, { timeout: 7000 });
+    }
+  }
+
+  async verifyShoppingBasket(items: number) {
+    if (items > 0) { 
+      await expect(this.shoppingBasket).toBeVisible();
+      await expect.soft(this.shoppingBasket).toHaveCSS('background-color', hexToRgb(Colors.alizarinCrimson));
+      await expect.soft(this.shoppingBasket).toHaveText(String(items));
+    } else {
+      expect(this.shoppingBasket).toBeHidden();
     }
   }
 
