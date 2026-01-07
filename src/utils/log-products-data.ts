@@ -1,4 +1,4 @@
-import { ProductData } from '@/types/products.ts';
+import { ProductData } from '@/types/index.ts';
 
 export function logAllProductData(products: ProductData[]) {
       

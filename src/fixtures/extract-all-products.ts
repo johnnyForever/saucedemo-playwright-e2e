@@ -1,7 +1,7 @@
 import { test as base, type Locator } from '@playwright/test';
-import { DashboardPage } from '@/pages/dashboard.ts';
-import { ProductData } from '@/types/products.ts';
-import { logAllProductData } from '@/utils/log-products-data.ts';
+import { logAllProductData } from '@/utils/index.ts';
+import { ProductData } from '@/types/index.ts';
+import { DashboardPage } from '@/pages/index.ts';
 
 type ExportProductsFixture = {
   productsData: ProductData[];

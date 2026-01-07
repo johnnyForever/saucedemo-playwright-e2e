@@ -1,8 +1,9 @@
-import { expect, type Page, type Locator } from '@playwright/test';
-import { Labels } from '@/data/labels.ts';
+import { expect, type Locator } from '@playwright/test';
+import { BaseComponent } from '@/components/base-component.ts';
+import { Labels } from '@/data/index.ts';
+import { component } from '@/locators/index.ts';
 
-export class SideBar {
-  readonly page: Page;
+export class SideBar extends BaseComponent {
   readonly sidebarBurgerButton: Locator;
   readonly sidebarBurgerItems: Locator;
   readonly allItemsBtn: Locator;
@@ -10,8 +11,8 @@ export class SideBar {
   readonly logoutBtn: Locator;
   readonly resetAppBtn: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: any) {
+    super(page, component.sidebar);
     this.sidebarBurgerButton = page.getByRole('button', { name: /Open Menu/i });
     this.sidebarBurgerItems = page.locator('.bm-item-list').locator('a');
     this.allItemsBtn = this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['allItems'] });
@@ -22,6 +23,7 @@ export class SideBar {
 
   async clickSidebarBtnAndVerify() {
     await this.sidebarBurgerButton.click();
+    expect(this.expectVisible()).toBeTruthy();
     await expect.soft(this.allItemsBtn).toBeVisible();
     await expect.soft(this.aboutBtn).toBeVisible();
     await expect.soft(this.aboutBtn).toHaveAttribute('href', process.env.ABOUT_URL!);

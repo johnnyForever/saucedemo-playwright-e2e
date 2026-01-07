@@ -1,7 +1,6 @@
 import { expect, type Page, type Locator } from '@playwright/test';
-import { hexToRgb } from '@/utils/hex-to-rgb.ts';
-import { Labels } from '@/data/labels.ts';
-import { Colors } from '@/data/colors.ts';
+import { Labels, Colors } from '@/data/index.ts';
+import { hexToRgb } from '@/utils/index.ts';
 
 export class LoginPage {
   readonly page: Page;

@@ -15,3 +15,5 @@
 /allure-results
 /auth.setup.ts
 /.prettierrc
+/eslint.config.js
+/eslint.config.ts

@@ -10,11 +10,23 @@ export const Labels = {
     pageHeader: 'Swag Labs',
     productsTitle: 'Products',
     addToCartButton: 'Add to cart',
+    removeButton: 'Remove',
   },
   sidebarElLabels: {
     allItems: 'All Items',
     about: 'About',
     logout: 'Logout',
     resetApp: 'Reset App State',
+  },
+  shoppingCart: {
+    yourCartTitle: 'Your Cart',
+    checkoutTitle: 'Checkout: Your Information',
+    overviewTitle: 'Checkout: Overview',
+    orderCompleteTitle: 'Checkout: Complete!',
+    completeOrder: 'Thank you for your order!',
+    completeOrderFullText: 'Your order has been dispatched, and will arrive just as fast as the pony can get there!',
+    goHomeBtn: 'Back Home',
+    chcekoutButton: 'Checkout',
+    finishButton: 'Finish',
   },
 } as const;

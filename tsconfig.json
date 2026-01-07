@@ -23,7 +23,7 @@
     "tests/**/*",
     "fixtures/**/*",
     "playwright.config.ts",
-    "**/*.ts",
+    "**/*.ts", "eslint.config.js",
   ],
   "exclude": [
     "node_modules",

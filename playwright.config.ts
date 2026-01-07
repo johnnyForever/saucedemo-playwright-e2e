@@ -35,23 +35,23 @@ export default defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium' },
     },
-    {
-      name: 'firefox',
-      use: { browserName: 'firefox' },
-    },
-    {
-      name: 'webkit',
-      use: { browserName: 'webkit' },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { browserName: 'firefox' },
+    // },
+    // {
+    //   name: 'webkit',
+    //   use: { browserName: 'webkit' },
+    // },
 
-    // Mobile emulator
-    {
-      name: 'mobile chrome',
-      use: {
-        ...devices['Pixel 5'],
-        browserName: 'chromium',
-      },
-    },
+    // // Mobile emulator
+    // {
+    //   name: 'mobile chrome',
+    //   use: {
+    //     ...devices['Pixel 5'],
+    //     browserName: 'chromium',
+    //   },
+    // },
   ],
   //   webServer: {
   //   command: 'npm run start',

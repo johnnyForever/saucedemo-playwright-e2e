@@ -1,5 +1,5 @@
-import { ProductData } from '@/types/products.ts';
-import { SortProductsFilter, FilterOptions } from '@/data/product-filter.ts';
+import { ProductData } from '@/types/index.ts';
+import { SortProductsFilter, FilterOptions } from '@/data/index.ts';
 
 export function sortProductData(filterOptions: FilterOptions, products: ProductData[]): any {
   switch (filterOptions) {
