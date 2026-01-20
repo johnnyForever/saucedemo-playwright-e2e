@@ -46,3 +46,26 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 14
+
+      - name: Publish HTML Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: reports/${{ github.run_number }}
+          keep_files: true
+
+      - name: Add report link to summary
+        if: always()
+        run: |
+          echo "### 📊 Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "View the full Playwright report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Display test execution logs
+        if: always()
+        run: |
+          echo "### 📋 Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          npm run logs >> $GITHUB_STEP_SUMMARY 2>&1 || echo "No test logs available" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

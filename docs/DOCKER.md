@@ -53,13 +53,28 @@ docker-compose --profile tools run logs-viewer
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root (use `.env.example` as template):
 
 ```env
-PASSWORD=secret_sauce
+PASSWORD='secret_sauce'
+DASHBOARD_URL='/inventory.html'
+TOKEN_EP='submit.backtrace.io/UNIVERSE/TOKEN/json'
+DASHBOARD_PICTURE_URL='/static/media/'
+ABOUT_URL='https://saucelabs.com/'
 ```
 
 The Docker setup will automatically load this file.
+
+**Required:**
+
+- `PASSWORD` - Password for test users
+
+**Optional (but recommended):**
+
+- `DASHBOARD_URL` - Dashboard page path for URL verification
+- `TOKEN_EP` - Token endpoint for API request verification
+- `DASHBOARD_PICTURE_URL` - Picture URL path for image verification
+- `ABOUT_URL` - About page URL for link verification
 
 ## Volume Mounts
 
@@ -87,6 +102,10 @@ docker build -t saucedemo-e2e .
 ```bash
 docker run --rm \
   -e PASSWORD=secret_sauce \
+  -e DASHBOARD_URL=/inventory.html \
+  -e TOKEN_EP=submit.backtrace.io/UNIVERSE/TOKEN/json \
+  -e DASHBOARD_PICTURE_URL=/static/media/ \
+  -e ABOUT_URL=https://saucelabs.com/ \
   -v "$(pwd)/playwright-report:/app/playwright-report" \
   -v "$(pwd)/test-results:/app/test-results" \
   -v "$(pwd)/playwright.db:/app/playwright.db" \
@@ -120,6 +139,10 @@ jobs:
         run: npm test
         env:
           PASSWORD: ${{ secrets.PASSWORD }}
+          DASHBOARD_URL: '/inventory.html'
+          TOKEN_EP: 'submit.backtrace.io/UNIVERSE/TOKEN/json'
+          DASHBOARD_PICTURE_URL: '/static/media/'
+          ABOUT_URL: 'https://saucelabs.com/'
 ```
 
 ## Troubleshooting
