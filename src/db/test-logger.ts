@@ -1,12 +1,10 @@
-import SqliteDB from './sqlite.ts';
+import SqliteDB from '@/db/sqlite.ts';
 import type Database from 'better-sqlite3';
+import { TestLogRow, FailedTestRow, TestStatsRow } from '@/types/test-log.ts';
 
 export class TestLogger {
   private db: Database.Database;
   private insertLog: Database.Statement;
-  private insertCleanup: Database.Statement;
-  private markCleaned: Database.Statement;
-  private getPendingCleanup: Database.Statement;
 
   constructor() {
     this.db = SqliteDB.getInstance();
@@ -15,47 +13,13 @@ export class TestLogger {
       INSERT INTO test_log (test_name, status, duration_ms, error_message)
       VALUES (?, ?, ?, ?)
     `);
-
-    this.insertCleanup = this.db.prepare(`
-      INSERT INTO test_cleanup (resource_type, resource_id, test_name)
-      VALUES (?, ?, ?)
-    `);
-
-    this.markCleaned = this.db.prepare(`
-      UPDATE test_cleanup 
-      SET cleaned_up = 1 
-      WHERE resource_type = ? AND resource_id = ?
-    `);
-
-    this.getPendingCleanup = this.db.prepare(`
-      SELECT * FROM test_cleanup 
-      WHERE cleaned_up = 0
-      ORDER BY created_at DESC
-    `);
   }
 
-  // Log test execution
   logTest(testName: string, status: 'passed' | 'failed' | 'skipped', durationMs?: number, errorMessage?: string) {
     this.insertLog.run(testName, status, durationMs || null, errorMessage || null);
   }
 
-  // Track resource for cleanup
-  trackResource(resourceType: string, resourceId: string, testName?: string) {
-    this.insertCleanup.run(resourceType, resourceId, testName || null);
-  }
-
-  // Mark resource as cleaned up
-  markResourceCleaned(resourceType: string, resourceId: string) {
-    this.markCleaned.run(resourceType, resourceId);
-  }
-
-  // Get all pending cleanup items
-  getPendingCleanupItems() {
-    return this.getPendingCleanup.all();
-  }
-
-  // Get recent test logs
-  getRecentLogs(limit: number = 10) {
+  getRecentLogs(limit: number = 10): TestLogRow[] {
     return this.db
       .prepare(
         `
@@ -70,11 +34,10 @@ export class TestLogger {
         LIMIT ?
       `
       )
-      .all(limit);
+      .all(limit) as TestLogRow[];
   }
 
-  // Get failed tests
-  getFailedTests(limit: number = 10) {
+  getFailedTests(limit: number = 10): FailedTestRow[] {
     return this.db
       .prepare(
         `
@@ -88,11 +51,10 @@ export class TestLogger {
         LIMIT ?
       `
       )
-      .all(limit);
+      .all(limit) as FailedTestRow[];
   }
 
-  // Get test statistics
-  getTestStats() {
+  getTestStats(): TestStatsRow {
     return this.db
       .prepare(
         `
@@ -107,7 +69,7 @@ export class TestLogger {
         FROM test_log
       `
       )
-      .get();
+      .get() as TestStatsRow;
   }
 }
 

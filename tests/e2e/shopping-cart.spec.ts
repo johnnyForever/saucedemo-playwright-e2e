@@ -1,7 +1,5 @@
 import { test, expect } from '@/fixtures/index.ts';
-import { Labels } from '@/data/index.ts';
-
-const userData = { firstName: 'John', lastName: 'Doe', zipCode: '000 00' };
+import { Labels, checkoutUserData } from '@/data/index.ts';
 
 test(
   'Succesfully finish shopping with full basket',
@@ -24,7 +22,7 @@ test(
     await shoppingCart.cartButttons.checkoutBtn.click();
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
     await verifyShoppingCart(6);
-    await shoppingCart.fillInCheckout(userData.firstName, userData.lastName, userData.zipCode);
+    await shoppingCart.fillInCheckout(checkoutUserData.valid.firstName, checkoutUserData.valid.lastName, checkoutUserData.valid.zipCode);
     await shoppingCart.cartButttons.continueBtn.click();
 
     await verifyShoppingCart(6);
@@ -51,13 +49,17 @@ test('Checkout information error messages validations', async ({
   await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
 
   await test.step('Verify missing postal code message', async () => {
-    await shoppingCart.fillInCheckout(userData.firstName, userData.lastName, '');
+    await shoppingCart.fillInCheckout(
+      checkoutUserData.emptyZipCode.firstName,
+      checkoutUserData.emptyZipCode.lastName,
+      checkoutUserData.emptyZipCode.zipCode
+    );
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['postalCodeRequired']);
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
   });
   await test.step('Verify missing fisrt name message', async () => {
-    await shoppingCart.userData.zipCode.fill(userData.zipCode);
+    await shoppingCart.userData.zipCode.fill(checkoutUserData.valid.zipCode);
     await shoppingCart.userData.firstName.clear();
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['firstNameRequired']);
@@ -65,7 +67,7 @@ test('Checkout information error messages validations', async ({
   });
 
   await test.step('Verify missing last name message', async () => {
-    await shoppingCart.userData.firstName.fill(userData.firstName);
+    await shoppingCart.userData.firstName.fill(checkoutUserData.valid.firstName);
     await shoppingCart.userData.lastName.clear();
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['lastNameRequired']);
@@ -78,15 +80,15 @@ test('Checkout information error messages validations', async ({
   await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
 
   await test.step('Verify missing last name message when only first name is filled in', async () => {
-    await shoppingCart.userData.firstName.fill(userData.firstName);
+    await shoppingCart.userData.firstName.fill(checkoutUserData.valid.firstName);
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['lastNameRequired']);
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
   });
   await test.step('Verify missing first name message when second name and zip code is filled in', async () => {
     await shoppingCart.userData.firstName.clear();
-    await shoppingCart.userData.lastName.fill(userData.firstName);
-    await shoppingCart.userData.zipCode.fill(userData.zipCode);
+    await shoppingCart.userData.lastName.fill(checkoutUserData.valid.firstName);
+    await shoppingCart.userData.zipCode.fill(checkoutUserData.valid.zipCode);
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['firstNameRequired']);
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
@@ -202,7 +204,7 @@ test('Cancel checkout at different stages and verify cart state', async ({
   await test.step('Go to checkout, fill in data, then cancel', async () => {
     await shoppingCart.cartButttons.checkoutBtn.click();
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
-    await shoppingCart.fillInCheckout(userData.firstName, userData.lastName, userData.zipCode);
+    await shoppingCart.fillInCheckout(checkoutUserData.valid.firstName, checkoutUserData.valid.lastName, checkoutUserData.valid.zipCode);
     await shoppingCart.cartButttons.cancelBtn.click();
     await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(2);
@@ -211,7 +213,11 @@ test('Cancel checkout at different stages and verify cart state', async ({
 
   await test.step('Complete checkout flow to overview and then cancel', async () => {
     await shoppingCart.cartButttons.checkoutBtn.click();
-    await shoppingCart.fillInCheckout(userData.firstName, userData.lastName, userData.zipCode);
+    await shoppingCart.fillInCheckout(
+      checkoutUserData.valid.firstName,
+      checkoutUserData.valid.lastName,
+      checkoutUserData.valid.zipCode
+    );
     await shoppingCart.cartButttons.continueBtn.click();
     await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
     await shoppingCart.countItemsInCart(2);
@@ -250,7 +256,7 @@ test('Complete order with single item', async ({
   await test.step('Proceed to checkout', async () => {
     await shoppingCart.cartButttons.checkoutBtn.click();
     await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
-    await shoppingCart.fillInCheckout(userData.firstName, userData.lastName, userData.zipCode);
+    await shoppingCart.fillInCheckout(checkoutUserData.valid.firstName, checkoutUserData.valid.lastName, checkoutUserData.valid.zipCode);
     await shoppingCart.cartButttons.continueBtn.click();
   });
 

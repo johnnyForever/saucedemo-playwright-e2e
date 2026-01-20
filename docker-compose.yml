@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  playwright-tests:
+    healthcheck:
+    test: ["CMD", "npx", "playwright", "--version"]
+    interval: 10s
+    timeout: 5s
+    retries: 3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PASSWORD=${PASSWORD:-secret_sauce}
+    volumes:
+      # Mount source code for live changes during development
+      - ./src:/app/src
+      - ./tests:/app/tests
+      # Mount output directories to host
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+      # Mount database to persist logs
+      - ./playwright.db:/app/playwright.db
+    command: npm test
+
+  # Service for viewing test logs
+  logs-viewer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./playwright.db:/app/playwright.db
+    command: npm run logs
+    profiles:
+      - tools
+
+  # Service for running smoke tests only
+  smoke-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PASSWORD=${PASSWORD:-secret_sauce}
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      - ./playwright.db:/app/playwright.db
+    command: npm run test:smoke
+    profiles:
+      - smoke

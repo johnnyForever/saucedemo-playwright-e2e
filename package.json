@@ -16,7 +16,11 @@
     "logs": "npx tsx src/db/view-logs.ts",
     "logs:failed": "npx tsx src/db/view-logs.ts failed",
     "logs:stats": "npx tsx src/db/view-logs.ts stats",
-    "logs:cleanup": "npx tsx src/db/view-logs.ts cleanup"
+    "docker:build": "docker build -t saucedemo-e2e .",
+    "docker:test": "docker-compose up --build playwright-tests",
+    "docker:smoke": "docker-compose --profile smoke up --build smoke-tests",
+    "docker:logs": "docker-compose --profile tools run --rm logs-viewer",
+    "docker:shell": "docker-compose run --rm playwright-tests sh"
   },
   "repository": {
     "type": "git",

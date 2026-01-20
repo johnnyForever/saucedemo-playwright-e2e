@@ -1,4 +1,4 @@
-import { expect, type Locator } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { BaseComponent } from '@/components/base-component.ts';
 import { Labels } from '@/data/index.ts';
 import { component } from '@/locators/index.ts';
@@ -11,7 +11,7 @@ export class SideBar extends BaseComponent {
   readonly logoutBtn: Locator;
   readonly resetAppBtn: Locator;
 
-  constructor(page: any) {
+  constructor(page: Page) {
     super(page, component.sidebar);
     this.sidebarBurgerButton = page.getByRole('button', { name: /Open Menu/i });
     this.sidebarBurgerItems = page.locator('.bm-item-list').locator('a');

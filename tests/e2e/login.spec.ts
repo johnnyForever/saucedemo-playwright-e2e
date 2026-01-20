@@ -1,9 +1,8 @@
 import { test, expect } from '@/fixtures/index.ts';
-import { Labels } from '@/data/index.ts';
+import { Labels, testInputs } from '@/data/index.ts';
 import { loadUsers } from '@/db/export-users.ts';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
-const testText = '1234*/-+Test.,?ABC@[]56789';
 
 activeUsers.forEach((user) => {
   test.describe('Login successfully with all active users', () => {
@@ -116,9 +115,9 @@ test('Input special characters to username and password fields', async ({ loginP
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
-  await loginPage.usernameField.fill(testText);
-  await expect.soft(loginPage.usernameField).toHaveValue(testText);
+  await loginPage.usernameField.fill(testInputs.specialCharacters);
+  await expect.soft(loginPage.usernameField).toHaveValue(testInputs.specialCharacters);
 
-  await loginPage.passwordField.fill(testText);
-  await expect.soft(loginPage.passwordField).toHaveValue(testText);
+  await loginPage.passwordField.fill(testInputs.specialCharacters);
+  await expect.soft(loginPage.passwordField).toHaveValue(testInputs.specialCharacters);
 });

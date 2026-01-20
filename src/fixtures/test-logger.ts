@@ -5,7 +5,7 @@ type TestLogger = ReturnType<typeof getTestLogger>;
 
 interface TestFixtures {
   logger: TestLogger;
-  autoLogger: void; // Auto-fixture that runs for every test
+  autoLogger: void;
 }
 
 export const test = base.extend<TestFixtures>({
@@ -25,11 +25,11 @@ export const test = base.extend<TestFixtures>({
       const status = testInfo.status === 'passed' ? 'passed' : testInfo.status === 'skipped' ? 'skipped' : 'failed';
       const errorMessage = testInfo.error?.message;
 
-      console.log('[TEST LOGGER] Logging test:', testInfo.title, 'Status:', status, 'Duration:', duration);
+      if (process.env.DEBUG_LOGGER === 'true') {
+        console.log('[TEST LOGGER] Logging test:', testInfo.title, 'Status:', status, 'Duration:', duration);
+      }
       logger.logTest(testInfo.title, status, duration, errorMessage);
     },
     { auto: true },
   ],
 });
-
-export { expect } from '@playwright/test';

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * View Test Logs and Cleanup Status
+ * View Test Logs
  *
  * Usage:
  *   npx tsx src/db/view-logs.ts [command]
@@ -9,10 +9,10 @@
  *   recent     - Show recent test executions (default)
  *   failed     - Show failed tests
  *   stats      - Show test statistics
- *   cleanup    - Show pending cleanup items
  */
 
-import { getTestLogger } from './test-logger.js';
+import { getTestLogger } from '@/db/test-logger.js';
+import { TestLog } from '@/types/index.js';
 
 const logger = getTestLogger();
 const command = process.argv[2] || 'recent';
@@ -23,9 +23,16 @@ console.log('='.repeat(80));
 switch (command) {
   case 'recent': {
     console.log('\n🕐 Recent Test Executions:\n');
-    const logs = logger.getRecentLogs(20);
+    const logs = logger.getRecentLogs(20) as unknown as TestLog[];
     if (logs.length > 0) {
-      console.table(logs);
+      const formattedLogs = logs.map((log: TestLog) => ({
+        test_name: log.test_name,
+        status: log.status,
+        duration_ms: log.duration_ms,
+        error: log.error_message ? log.error_message.substring(0, 100) + '...' : null,
+        run_date: log.run_date,
+      }));
+      console.table(formattedLogs);
     } else {
       console.log('No test logs found.');
     }
@@ -34,9 +41,14 @@ switch (command) {
 
   case 'failed': {
     console.log('\n❌ Failed Tests:\n');
-    const failed = logger.getFailedTests(20);
+    const failed = logger.getFailedTests(20) as unknown as TestLog[];
     if (failed.length > 0) {
-      console.table(failed);
+      const formattedFailed = failed.map((test: TestLog) => ({
+        test_name: test.test_name,
+        error: test.error_message ? test.error_message.substring(0, 150) + '...' : null,
+        run_date: test.run_date,
+      }));
+      console.table(formattedFailed);
     } else {
       console.log('No failed tests! ✅');
     }
@@ -54,18 +66,6 @@ switch (command) {
     break;
   }
 
-  case 'cleanup': {
-    console.log('\n🧹 Pending Cleanup Items:\n');
-    const pending = logger.getPendingCleanupItems();
-    if (pending.length > 0) {
-      console.table(pending);
-      console.log(`\n⚠️  ${pending.length} item(s) need cleanup`);
-    } else {
-      console.log('No pending cleanup items! ✅');
-    }
-    break;
-  }
-
   default:
     console.log(`
 ❌ Unknown command: ${command}
@@ -74,12 +74,11 @@ Available commands:
   recent     - Show recent test executions
   failed     - Show failed tests
   stats      - Show test statistics
-  cleanup    - Show pending cleanup items
 
 Examples:
   npx tsx src/db/view-logs.ts recent
   npx tsx src/db/view-logs.ts failed
-  npx tsx src/db/view-logs.ts cleanup
+  npx tsx src/db/view-logs.ts stats
     `);
 }
 

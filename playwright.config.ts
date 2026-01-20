@@ -9,9 +9,9 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['**/e2e/*.ts'],
   fullyParallel: true,
-  retries: 2,
+  retries: process.env.CI ? 2 : 0,
   reporter: [
-    ['html', { open: 'always' }],
+    ['html', { open: 'never' }],
     ['json', { outputFile: 'results.json' }],
     ['allure-playwright'],
     ['list', { printSteps: true }],
@@ -35,32 +35,31 @@ export default defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium', isMobile: false, locale: 'en-GB', timezoneId: 'Europe/Paris' },
     },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox', isMobile: false },
+    },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit', isMobile: false },
+    },
+
+    // Mobile emulator
+    {
+      name: 'mobile chrome',
+      use: {
+        ...devices['Pixel 5'],
+        browserName: 'chromium',
+        isMobile: false,
+        channel: 'msedge',
+      },
+    },
+    {
+      name: 'Mobile Safari',
+      use: {
+        ...devices['iPhone 12'],
+        viewport: { width: 1280, height: 720 },
+      },
+    },
   ],
-  // {
-  //   name: 'firefox',
-  //   use: { browserName: 'firefox', isMobile: false, },
-  // },
-  // {
-  //   name: 'webkit',
-  //   use: { browserName: 'webkit', isMobile: false, },
-  // },
-
-  // // Mobile emulator
-  // {
-  //   name: 'mobile chrome',
-  //   use: {
-  //     ...devices['Pixel 5'],
-  //     browserName: 'chromium',
-  //     isMobile: false,
-  //channel: 'msedge'
-  //   },
-  // },
-  // {
-  // name: 'Mobile Safari',
-  // use: { ...devices['iPhone 12'],
-  //   viewport: { width: 1280, height: 720 }
-  //  },
-
-  //},
-  // ],
 });

@@ -7,6 +7,7 @@ import { test as exportAllProducts } from './extract-all-products.ts';
 import { test as verifyProductDetail } from './verify-product-detail.ts';
 import { test as verifyShoppingCart } from './verify-shopping-cart.ts';
 import { test as testLogger } from './test-logger.ts';
+import { test as globalSetup } from './global-setup.ts';
 
 export const test = mergeTests(
   loggedIn,
@@ -16,7 +17,8 @@ export const test = mergeTests(
   exportAllProducts,
   verifyProductDetail,
   verifyShoppingCart,
-  testLogger
+  testLogger,
+  globalSetup
 );
 
 export { expect } from '@playwright/test';

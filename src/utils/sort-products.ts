@@ -1,7 +1,7 @@
 import { ProductData } from '@/types/index.ts';
 import { SortProductsFilter, FilterOptions } from '@/data/index.ts';
 
-export function sortProductData(filterOptions: FilterOptions, products: ProductData[]): any {
+export function sortProductData(filterOptions: FilterOptions, products: ProductData[]): ProductData[] {
   switch (filterOptions) {
     case SortProductsFilter.az:
       return products.toSorted((a, b) => a.name.localeCompare(b.name));
