@@ -31,7 +31,7 @@ export const test = base.extend<ExportProductsFixture>({
         } as ProductData;
       })
     );
-    logAllProductData(products);
+    // logAllProductData(products); uncomment for debugging
 
     await use(products);
   },

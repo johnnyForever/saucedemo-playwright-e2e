@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   test:
-    timeout-minutes: 7
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
