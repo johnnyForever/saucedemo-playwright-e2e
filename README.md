@@ -11,8 +11,7 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
 - **SQLite Test Logging** - Track test execution history
 - **Docker Support** - Containerized testing
 - **Allure Reports** - Detailed test reporting
-- **GitHub Actions** - CI/CD with automated test reporting
-- **GitHub Pages** - Published test reports accessible via web
+- **GitHub Actions** - CI/CD with automated test reporting and annotations
 
 ## Prerequisites
 
@@ -260,35 +259,24 @@ GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every
 3. Installs dependencies with `npm ci`
 4. Installs Playwright browsers with OS dependencies
 5. Runs all tests with required environment variables
-6. Publishes HTML report to GitHub Pages
+6. Generates test annotations and summaries using GitHub reporter
 7. Uploads test reports as artifacts (14-day retention)
-8. Adds report link to workflow summary
 
 ### Viewing CI Test Results
 
 After a workflow run completes, you can view test results in multiple ways:
 
-**1. GitHub Pages (Recommended)**
+**1. GitHub Annotations (Inline)**
 
-- Navigate to the workflow run summary
-- Click the report link in the summary section
-- Or visit: `https://<username>.github.io/<repo-name>/reports/<run-number>`
+- Test failures appear as annotations directly in the workflow run
+- Click on failed tests to see error messages and stack traces
+- File and line links navigate directly to the source code
 
 **2. Workflow Artifacts**
 
 - Go to the workflow run page
 - Download the `playwright-report` artifact
-- Extract and open `index.html` locally
-
-**3. GitHub Actions Setup**
-
-To enable GitHub Pages for test reports:
-
-1. Go to repository **Settings → Pages**
-2. Under "Source", select **GitHub Actions**
-3. Save changes
-
-Each test run is saved with its unique run number, allowing you to compare historical results.
+- Extract and open `index.html` locally to view the full interactive report
 
 ## Reports
 

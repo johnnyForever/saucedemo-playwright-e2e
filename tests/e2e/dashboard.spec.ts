@@ -63,6 +63,7 @@ test('Sorting of dashboard products with filter', async ({ loggedIn, dashboardPa
 test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashboardItems, verifyShoppingCart }) => {
   await loggedIn.verifyDashboard();
   await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+  await dashboardPage.sidebar.closeSidebar();
   const products = await dashboardPage.getAllProductItems();
 
   for (const product of products) {
@@ -87,11 +88,13 @@ test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashbo
   await test.step('Refresh dashboard to have add to cart buttons visible in default state', async () => {
     await dashboardPage.page.reload({ waitUntil: 'networkidle' });
     await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+    await dashboardPage.sidebar.closeSidebar();
 
     for (let i = 0; i < numOfProducts; i++) {
       await products[i].addToCartBtn.click();
       await verifyShoppingCart(i + 1);
     }
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
     await dashboardPage.sidebar.clickResetAppBtn();
     await verifyShoppingCart(0);
   });

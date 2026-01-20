@@ -17,6 +17,7 @@ export default defineConfig({
     ['json', { outputFile: 'results.json' }],
     ['allure-playwright'],
     ['list', { printSteps: true }],
+    ...(process.env.CI ? [['github'] as const] : []),
   ],
 
   use: {

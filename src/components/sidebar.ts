@@ -34,6 +34,7 @@ export class SideBar extends BaseComponent {
   async clickAllItemsBtn() {
     await expect(this.allItemsBtn).toBeEnabled();
     await this.allItemsBtn.click();
+    await expect(this.root).toBeHidden();
   }
 
   async clickResetAppBtn() {
@@ -47,7 +48,8 @@ export class SideBar extends BaseComponent {
   }
 
   async closeSidebar() {
-    // Click the burger button again to close the sidebar
-    await this.sidebarBurgerButton.click();
+    // Press Escape key to close the sidebar
+    await this.page.keyboard.press('Escape');
+    await expect(this.root).toBeHidden();
   }
 }
