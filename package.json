@@ -12,7 +12,12 @@
     "test:regression": "playwright test --grep @regression",
     "report": "playwright show-report",
     "test:report": "playwright test && playwright show-report",
-    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright || rm playwright.db"
+    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright || rm playwright.db",
+    "analyze": "npx tsx src/db/analyze-results.ts",
+    "analyze:latest": "npx tsx src/db/analyze-results.ts latest",
+    "analyze:flaky": "npx tsx src/db/analyze-results.ts flaky",
+    "analyze:failed": "npx tsx src/db/analyze-results.ts failed",
+    "analyze:stats": "npx tsx src/db/analyze-results.ts stats"
   },
   "repository": {
     "type": "git",

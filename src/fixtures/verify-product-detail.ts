@@ -19,7 +19,7 @@ export const test = base.extend<VerifyProductDetailFixture>({
 
         // On product detail
         const detail = await dashboardPage.productDetail.productDetailData();
-        expect(dashboardPage.productDetail.expectVisible()).toBeTruthy();
+        await dashboardPage.productDetail.expectVisible();
         expect.soft(detail.name).toBe(expectedData.name);
         expect.soft(detail.description).toBe(expectedData.description);
         expect.soft(detail.price).toBe(expectedData.price);

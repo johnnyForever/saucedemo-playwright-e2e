@@ -1,5 +1,5 @@
 import { expect, type Page, type Locator } from '@playwright/test';
-import { component, checkoutCredentials, completeOrder } from '@/locators/index.ts';
+import * as locators from '@/locators/index.ts';
 import { Labels, Colors } from '@/data/index.ts';
 import { hexToRgb } from '@/utils/index.ts';
 
@@ -7,21 +7,19 @@ export class ShoppingCart {
   readonly page: Page;
   readonly cartTittle: Locator;
   readonly productsItems: Locator;
-  readonly continueBtn: Locator;
   readonly orderCompleted: { header: Locator; fullText: Locator; goHomeButton: Locator };
-  readonly finishButton: Locator;
-  readonly checkoutButton: Locator;
-  readonly userData: { firstName: Locator; lastName: Locator; zipCode: Locator; };
+  readonly userData: { firstName: Locator; lastName: Locator; zipCode: Locator };
+  readonly cartButttons: { continueBtn: Locator; checkoutBtn: Locator; finishBtn: Locator; cancelBtn: Locator };
+  readonly errorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.cartTittle = this.page.getByTestId('title');
-    this.productsItems = this.page.locator(component.inventoryItem);
-    this.continueBtn = this.page.getByTestId('continue');
-    this.orderCompleted = completeOrder(this.page);
-    this.checkoutButton = this.page.getByRole('button', { name: Labels.shoppingCart['chcekoutButton'] });
-    this.finishButton = this.page.getByRole('button', { name: Labels.shoppingCart['finishButton'] });
-    this.userData = checkoutCredentials(this.page);
+    this.productsItems = this.page.locator(locators.component.inventoryItem);
+    this.orderCompleted = locators.completeOrder(this.page);
+    this.userData = locators.userCheckoutData(this.page);
+    this.cartButttons = locators.cartButttons(this.page);
+    this.errorMessage = this.page.locator('.error-message-container.error');
   }
 
   async assertCartTittle(title: string) {
@@ -43,9 +41,9 @@ export class ShoppingCart {
     if (zipCode !== '') {
       await this.userData.zipCode.fill(zipCode);
     }
-    expect(this.userData.firstName).toHaveValue(firstName);
-    expect(this.userData.lastName).toHaveValue(lastName);
-    expect(this.userData.zipCode).toHaveValue(zipCode);
+    await expect(this.userData.firstName).toHaveValue(firstName);
+    await expect(this.userData.lastName).toHaveValue(lastName);
+    await expect(this.userData.zipCode).toHaveValue(zipCode);
   }
 
   async verifyCompleteOrderPage() {
@@ -56,6 +54,10 @@ export class ShoppingCart {
     await expect.soft(this.orderCompleted.goHomeButton).toHaveCSS('background-color', hexToRgb(Colors.eucalyptus));
   }
 
-  async verifyYourCart() {
+  async verifyErrorMessage(message: string) {
+    await expect.soft(this.errorMessage).toBeAttached();
+    await expect.soft(this.errorMessage).toBeVisible();
+    await expect.soft(this.errorMessage).toHaveText(message);
+    await expect.soft(this.errorMessage).toHaveCSS('background-color', hexToRgb(Colors.alizarinCrimson));
   }
 }

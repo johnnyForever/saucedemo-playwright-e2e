@@ -12,7 +12,7 @@ export const component = {
   sidebar: '[class="bm-item-list"]',
 };
 
-export const checkoutCredentials = (page: Page) => ({
+export const userCheckoutData = (page: Page) => ({
   firstName: page.getByTestId('firstName'),
   lastName: page.getByTestId('lastName'),
   zipCode: page.getByTestId('postalCode'),

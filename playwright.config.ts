@@ -9,11 +9,12 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['**/e2e/*.ts'],
   fullyParallel: true,
+  retries: 2,
   reporter: [
     ['html', { open: 'always' }],
     ['json', { outputFile: 'results.json' }],
-    //['allure-playwright'],
-    //[SQLiteReporter, { dbPath: './test-results/test-results.db' }],
+   // ['./src/reporters/sqlite-reporter.ts'],
+    ['allure-playwright'],
     ['list', { printSteps: true }],
   ],
 
@@ -33,29 +34,34 @@ export default defineConfig({
     // Desktop browsers
     {
       name: 'chromium',
-      use: { browserName: 'chromium' },
+      use: { browserName: 'chromium', isMobile: false, locale: 'en-GB', timezoneId: 'Europe/Paris' },
     },
-    // {
-    //   name: 'firefox',
-    //   use: { browserName: 'firefox' },
-    // },
-    // {
-    //   name: 'webkit',
-    //   use: { browserName: 'webkit' },
-    // },
-
-    // // Mobile emulator
-    // {
-    //   name: 'mobile chrome',
-    //   use: {
-    //     ...devices['Pixel 5'],
-    //     browserName: 'chromium',
-    //   },
-    // },
   ],
-  //   webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
+  // {
+  //   name: 'firefox',
+  //   use: { browserName: 'firefox', isMobile: false, },
   // },
+  // {
+  //   name: 'webkit',
+  //   use: { browserName: 'webkit', isMobile: false, },
+  // },
+
+  // // Mobile emulator
+  // {
+  //   name: 'mobile chrome',
+  //   use: {
+  //     ...devices['Pixel 5'],
+  //     browserName: 'chromium',
+  //     isMobile: false,
+  //channel: 'msedge'
+  //   },
+  // },
+  // {
+  // name: 'Mobile Safari',
+  // use: { ...devices['iPhone 12'],
+  //   viewport: { width: 1280, height: 720 }
+  //  },
+
+  //},
+  // ],
 });

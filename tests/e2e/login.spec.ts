@@ -1,6 +1,6 @@
 import { test, expect } from '@/fixtures/index.ts';
-import { loadUsers } from '@/db/export-users.ts';
 import { Labels } from '@/data/index.ts';
+import { loadUsers } from '@/db/export-users.ts';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
 const testText = '1234*/-+Test.,?ABC@[]56789';
@@ -22,17 +22,20 @@ test('Successfull login works', { tag: '@smoke' }, async ({ loginPage, dashboard
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
-  // Reload login page to verify if all elements reappear correctly
-  await loginPage.page.reload({ waitUntil: 'networkidle' });
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Reload login page to verify if all elements reappear correctly', async () => {
+    await loginPage.page.reload({ waitUntil: 'networkidle' });
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
+
   await loginPage.fillInLoginFields(standardUser.username, standardUser.password);
   await loginPage.loginButton.click();
   await dashboardPage.verifyDashboard();
 
-  // Reload dashboard to verify if user stay logged in
-  await loginPage.page.reload({ waitUntil: 'networkidle' });
-  await dashboardPage.verifyDashboard();
+  await test.step('Reload dashboard to verify if user stay logged in', async () => {
+    await loginPage.page.reload({ waitUntil: 'networkidle' });
+    await dashboardPage.verifyDashboard();
+  });
 });
 
 test('Login with missing password or username', async ({ loginPage, loginErrorMsg, dashboardPage }) => {
@@ -42,27 +45,30 @@ test('Login with missing password or username', async ({ loginPage, loginErrorMs
   await loginPage.loginButton.click();
   expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['usernameRequired'])).toBe(true);
 
-  // Login is not possible without password
-  await loginPage.usernameField.fill(standardUser.username);
-  await loginPage.loginButton.click();
-  await loginPage.verifyLoginPageContent();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['passwordRequired'])).toBe(true);
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Login is not possible without password', async () => {
+    await loginPage.usernameField.fill(standardUser.username);
+    await loginPage.loginButton.click();
+    await loginPage.verifyLoginPageContent();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['passwordRequired'])).toBe(true);
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
 
-  // Login is not possible without username
-  await loginPage.usernameField.clear();
-  await loginPage.passwordField.fill(standardUser.password);
-  await loginPage.loginButton.click();
-  await loginPage.verifyLoginPageContent();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['usernameRequired'])).toBe(true);
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Login is not possible without username', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.fill(standardUser.password);
+    await loginPage.loginButton.click();
+    await loginPage.verifyLoginPageContent();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['usernameRequired'])).toBe(true);
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
 
-  // Successfull login
-  await loginPage.usernameField.fill(standardUser.username);
-  await loginPage.loginButton.click();
-  await dashboardPage.verifyDashboard();
+  await test.step('Successfull login', async () => {
+    await loginPage.usernameField.fill(standardUser.username);
+    await loginPage.loginButton.click();
+    await dashboardPage.verifyDashboard();
+  });
 });
 
 test('Locked out and non existing user cannot login', async ({ loginPage, loginErrorMsg }) => {
@@ -70,35 +76,39 @@ test('Locked out and non existing user cannot login', async ({ loginPage, loginE
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
-  // Locked out user cannot login and correct error is displayed
-  await loginPage.fillInLoginFields(lockedUser.username, lockedUser.password);
-  await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['lockedOutUser'])).toBe(true);
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Locked out user cannot login and correct error is displayed', async () => {
+    await loginPage.fillInLoginFields(lockedUser.username, lockedUser.password);
+    await loginPage.clickLoginBtnAndVerifyApi();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['lockedOutUser'])).toBe(true);
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
 
-  // Try to login without password
-  await loginPage.usernameField.clear();
-  await loginPage.passwordField.clear();
-  await loginPage.usernameField.fill(lockedUser.username);
-  await loginPage.loginButton.click();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['passwordRequired'])).toBe(true);
+  await test.step('Try to login without password', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.clear();
+    await loginPage.usernameField.fill(lockedUser.username);
+    await loginPage.loginButton.click();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['passwordRequired'])).toBe(true);
+  });
 
-  // Try to login second time with username and password
-  await loginPage.passwordField.fill(lockedUser.password);
-  await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['lockedOutUser'])).toBe(true);
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Try to login second time with username and password', async () => {
+    await loginPage.passwordField.fill(lockedUser.password);
+    await loginPage.clickLoginBtnAndVerifyApi();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['lockedOutUser'])).toBe(true);
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
 
-  // Non existing user cannot login
-  await loginPage.usernameField.clear();
-  await loginPage.passwordField.clear();
-  await loginPage.fillInLoginFields(nonExistingUser.username, nonExistingUser.password);
-  await loginPage.clickLoginBtnAndVerifyApi();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+  await test.step('Non existing user cannot login', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.clear();
+    await loginPage.fillInLoginFields(nonExistingUser.username, nonExistingUser.password);
+    await loginPage.clickLoginBtnAndVerifyApi();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
 });
 
 test('Input special characters to username and password fields', async ({ loginPage }) => {

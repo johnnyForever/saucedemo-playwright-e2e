@@ -1,8 +1,8 @@
 import { test, expect } from '@/fixtures/index.ts';
-import { loadUsers } from '@/db/export-users.ts';
-import { SortProductsFilter } from '@/data/index.ts';
+import { SortProductsFilter} from '@/data/index.ts';
 import { ProductData } from '@/types/index.ts';
 import { sortProductData } from '@/utils/index.ts';
+import { loadUsers } from '@/db/export-users.ts';
 
 const numOfProducts = 6;
 const { standardUser } = loadUsers();
@@ -16,8 +16,9 @@ test(
     await dashboardPage.countInventory(numOfProducts);
     expect(productsData).toHaveLength(numOfProducts);
 
-    // Compare data of each product from dashboard to what is displayed in detail
-    await verifyProductDetail(productsData);
+    await test.step('Compare data of each product from dashboard to what is displayed in detail', async () => {
+      await verifyProductDetail(productsData);
+    });
   }
 );
 
@@ -59,7 +60,7 @@ test('Sorting of dashboard products with filter', async ({ loggedIn, dashboardPa
   await dashboardPage.verifyProductsSorting(defaultData);
 });
 
-test.only('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashboardItems, verifyShoppingCart }) => {
+test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashboardItems, verifyShoppingCart }) => {
   await loggedIn.verifyDashboard();
   await dashboardPage.sidebar.clickSidebarBtnAndVerify();
   const products = await dashboardPage.getAllProductItems();
@@ -80,16 +81,17 @@ test.only('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyD
     await verifyShoppingCart(0);
   }
 
-  // Refresh dashboard to have add to cart buttons visible in default state
-  await dashboardPage.page.reload({ waitUntil: 'networkidle' });
-  await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+  await test.step('Refresh dashboard to have add to cart buttons visible in default state', async () => {
+    await dashboardPage.page.reload({ waitUntil: 'networkidle' });
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
 
-  for (let i = 0; i < numOfProducts; i++) {
-    await products[i].addToCartBtn.click();
-    await verifyShoppingCart(i + 1);
-  }
-  await dashboardPage.sidebar.clickResetAppBtn();
-  await verifyShoppingCart(0);
+    for (let i = 0; i < numOfProducts; i++) {
+      await products[i].addToCartBtn.click();
+      await verifyShoppingCart(i + 1);
+    }
+    await dashboardPage.sidebar.clickResetAppBtn();
+    await verifyShoppingCart(0);
+  });
 });
 
 test('Logout using sidebar logout button', async ({ loggedIn, loginPage, dashboardPage, verifyShoppingCart }) => {
@@ -111,12 +113,13 @@ test('Logout using sidebar logout button', async ({ loggedIn, loginPage, dashboa
   await loginPage.loginButton.click();
   await dashboardPage.verifyDashboard();
 
-  // Basket stay full after logout/login
-  await verifyShoppingCart(6);
+  await test.step('Basket stay full after logout/login', async () => {
+    await verifyShoppingCart(6);
 
-  await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-  await dashboardPage.sidebar.clickResetAppBtn();
-  await verifyShoppingCart(0);
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+    await dashboardPage.sidebar.clickResetAppBtn();
+    await verifyShoppingCart(0);
+  });
 
   await dashboardPage.sidebar.clickLogoutBtn();
   await loginPage.verifyPageHeader();
@@ -138,50 +141,53 @@ test('Shopping cart indication on dashboard', async ({ loggedIn, dashboardPage, 
   await products[1].removeBtn.click();
   await products[2].removeBtn.click();
   await products[3].addToCartBtn.click();
-  await verifyShoppingCart(3)
+  await verifyShoppingCart(3);
 
   await products[4].addToCartBtn.click();
-  await verifyShoppingCart(4)
+  await verifyShoppingCart(4);
 
   await products[1].addToCartBtn.click();
   await products[2].addToCartBtn.click();
   await products[3].removeBtn.click();
   await products[4].removeBtn.click();
-  await verifyShoppingCart(4)
+  await verifyShoppingCart(4);
 
-  // // Reset dashboard and cart to its default state
-  await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-  await dashboardPage.sidebar.clickResetAppBtn();
+  await test.step('Reset dashboard and cart to its default state', async () => {
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+    await dashboardPage.sidebar.clickResetAppBtn();
+    await dashboardPage.page.reload({ waitUntil: 'networkidle' });
+  });
+
   await dashboardPage.page.reload({ waitUntil: 'networkidle' });
 
   await products[2].name.click();
-  await dashboardPage.productDetail.addToCart.click()
+  await dashboardPage.productDetail.addToCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(1)
+  await verifyShoppingCart(1);
 
   await products[3].name.click();
-  await dashboardPage.productDetail.addToCart.click()
+  await dashboardPage.productDetail.addToCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
   await products[5].name.click();
-  await dashboardPage.productDetail.addToCart.click()
+  await dashboardPage.productDetail.addToCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3)
+  await verifyShoppingCart(3);
 
   await products[5].name.click();
-  await dashboardPage.productDetail.removeFromCart.click()
+  await dashboardPage.productDetail.removeFromCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
   await products[4].name.click();
-  await dashboardPage.productDetail.addToCart.click()
+  await dashboardPage.productDetail.addToCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3)
+  await verifyShoppingCart(3);
 
   await products[3].name.click();
-  await dashboardPage.productDetail.removeFromCart.click()
+  await dashboardPage.productDetail.removeFromCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(2)
+  await verifyShoppingCart(2);
 
   await products[0].name.click();
-  await dashboardPage.productDetail.addToCart.click()
+  await dashboardPage.productDetail.addToCart.click();
   await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3)
+  await verifyShoppingCart(3);
 });

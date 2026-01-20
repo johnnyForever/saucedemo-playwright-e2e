@@ -4,6 +4,9 @@ export const Labels = {
     usernameRequired: 'Epic sadface: Username is required',
     lockedOutUser: 'Epic sadface: Sorry, this user has been locked out.',
     nonExistingUser: 'Epic sadface: Username and password do not match any user in this service',
+    postalCodeRequired: 'Error: Postal Code is required',
+    firstNameRequired: 'Error: First Name is required',
+    lastNameRequired: 'Error: Last Name is required',
   },
   elementLabels: {
     loginButton: 'Login',
