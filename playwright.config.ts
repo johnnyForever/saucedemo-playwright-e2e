@@ -13,7 +13,6 @@ export default defineConfig({
   reporter: [
     ['html', { open: 'always' }],
     ['json', { outputFile: 'results.json' }],
-   // ['./src/reporters/sqlite-reporter.ts'],
     ['allure-playwright'],
     ['list', { printSteps: true }],
   ],

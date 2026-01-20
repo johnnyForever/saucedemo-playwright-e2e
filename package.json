@@ -13,11 +13,10 @@
     "report": "playwright show-report",
     "test:report": "playwright test && playwright show-report",
     "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright || rm playwright.db",
-    "analyze": "npx tsx src/db/analyze-results.ts",
-    "analyze:latest": "npx tsx src/db/analyze-results.ts latest",
-    "analyze:flaky": "npx tsx src/db/analyze-results.ts flaky",
-    "analyze:failed": "npx tsx src/db/analyze-results.ts failed",
-    "analyze:stats": "npx tsx src/db/analyze-results.ts stats"
+    "logs": "npx tsx src/db/view-logs.ts",
+    "logs:failed": "npx tsx src/db/view-logs.ts failed",
+    "logs:stats": "npx tsx src/db/view-logs.ts stats",
+    "logs:cleanup": "npx tsx src/db/view-logs.ts cleanup"
   },
   "repository": {
     "type": "git",
