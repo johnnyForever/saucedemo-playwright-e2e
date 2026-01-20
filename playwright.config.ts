@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 
-dotenv.config();
+if (!process.env.CI) {
+  dotenv.config();
+}
 
 export default defineConfig({
   timeout: 70 * 1000,
@@ -33,15 +35,24 @@ export default defineConfig({
     // Desktop browsers
     {
       name: 'chromium',
-      use: { browserName: 'chromium', isMobile: false, locale: 'en-GB', timezoneId: 'Europe/Paris' },
+      use: {
+        browserName: 'chromium',
+        isMobile: false,
+      },
     },
     {
       name: 'firefox',
-      use: { browserName: 'firefox', isMobile: false },
+      use: {
+        browserName: 'firefox',
+        isMobile: false,
+      },
     },
     {
       name: 'webkit',
-      use: { browserName: 'webkit', isMobile: false },
+      use: {
+        browserName: 'webkit',
+        isMobile: false,
+      },
     },
 
     // Mobile emulator
@@ -50,15 +61,16 @@ export default defineConfig({
       use: {
         ...devices['Pixel 5'],
         browserName: 'chromium',
-        isMobile: false,
-        channel: 'msedge',
+        isMobile: true,
+        channel: 'chrome',
       },
     },
     {
       name: 'Mobile Safari',
       use: {
         ...devices['iPhone 12'],
-        viewport: { width: 1280, height: 720 },
+        browserName: 'webkit',
+        isMobile: true,
       },
     },
   ],

@@ -9,7 +9,13 @@ export class ShoppingCart {
   readonly productsItems: Locator;
   readonly orderCompleted: { header: Locator; fullText: Locator; goHomeButton: Locator };
   readonly userData: { firstName: Locator; lastName: Locator; zipCode: Locator };
-  readonly cartButttons: { continueBtn: Locator; checkoutBtn: Locator; finishBtn: Locator; cancelBtn: Locator };
+  readonly cartButttons: {
+    continueShoppingBtn: Locator;
+    continueBtn: Locator;
+    checkoutBtn: Locator;
+    finishBtn: Locator;
+    cancelBtn: Locator;
+  };
   readonly errorMessage: Locator;
 
   constructor(page: Page) {

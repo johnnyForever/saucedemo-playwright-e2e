@@ -40,27 +40,25 @@ class SqliteDB {
         CREATE INDEX IF NOT EXISTS idx_test_log_date ON test_log(run_date);
         CREATE INDEX IF NOT EXISTS idx_test_log_status ON test_log(status);`);
 
-      const insert = SqliteDB.instance.prepare(`
-        INSERT OR IGNORE INTO user_credentials (username, password, description, status) VALUES 
-        (?, ?, ?, ?)`);
-
-      type SauceDemoUser = [username: string, password: string, description: string, status: string];
-
       const PASSWORD = process.env.PASSWORD;
-      if (!PASSWORD) {
-        throw new Error('PASSWORD environment variable is required');
-      }
+      if (PASSWORD) {
+        const insert = SqliteDB.instance.prepare(`
+          INSERT OR IGNORE INTO user_credentials (username, password, description, status) VALUES 
+          (?, ?, ?, ?)`);
 
-      const usersToInsert: SauceDemoUser[] = [
-        ['standard_user', PASSWORD, 'standard', 'active'],
-        ['locked_out_user', PASSWORD, 'locked', 'inactive'],
-        ['problem_user', PASSWORD, 'problem', 'active'],
-        ['performance_glitch_user', PASSWORD, 'glitch', 'active'],
-        ['error_user', PASSWORD, 'error', 'active'],
-        ['visual_user', PASSWORD, 'visual', 'active'],
-        ['non_existing_user', 'password', 'non_existing', 'inactive'],
-      ];
-      usersToInsert.forEach((user) => insert.run(...user));
+        type SauceDemoUser = [username: string, password: string, description: string, status: string];
+
+        const usersToInsert: SauceDemoUser[] = [
+          ['standard_user', PASSWORD, 'standard', 'active'],
+          ['locked_out_user', PASSWORD, 'locked', 'inactive'],
+          ['problem_user', PASSWORD, 'problem', 'active'],
+          ['performance_glitch_user', PASSWORD, 'glitch', 'active'],
+          ['error_user', PASSWORD, 'error', 'active'],
+          ['visual_user', PASSWORD, 'visual', 'active'],
+          ['non_existing_user', 'password', 'non_existing', 'inactive'],
+        ];
+        usersToInsert.forEach((user) => insert.run(...user));
+      }
     }
     return SqliteDB.instance;
   }

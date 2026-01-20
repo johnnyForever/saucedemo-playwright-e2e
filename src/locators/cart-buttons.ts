@@ -1,9 +1,9 @@
 import type { Page } from '@playwright/test';
-import { Labels } from '@/data/index.ts';
 
 export const cartButttons = (page: Page) => ({
+  continueShoppingBtn: page.getByTestId('continue-shopping'),
   continueBtn: page.getByTestId('continue'),
-  checkoutBtn: page.getByRole('button', { name: Labels.shoppingCart['chcekoutButton'] }),
-  finishBtn: page.getByRole('button', { name: Labels.shoppingCart['finishButton'] }),
+  checkoutBtn: page.getByTestId('checkout'),
+  finishBtn: page.getByTestId('finish'),
   cancelBtn: page.getByTestId('cancel'),
 });

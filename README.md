@@ -68,16 +68,20 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
 saucedemo-e2e/
 ├── src/
 │   ├── components/     # Reusable UI components
-│   ├── data/           # Test data and labels
-│   ├── db/             # SQLite database utilities
+│   ├── data/           # Test data, labels, and centralized test inputs
+│   ├── db/             # SQLite database utilities and queries
 │   ├── fixtures/       # Custom Playwright fixtures
 │   ├── locators/       # Page element locators
 │   ├── pages/          # Page Object Model classes
-│   └── types/          # TypeScript type definitions
+│   ├── types/          # TypeScript type definitions
+│   └── utils/          # Helper functions (sorting, colors, logging)
 ├── tests/
 │   └── e2e/           # Test specifications
-├── docs/              # Documentation
+├── docs/              # Documentation (TEST_LOGGING.md, DOCKER.md)
+├── .github/
+│   └── workflows/     # GitHub Actions CI/CD
 ├── playwright.config.ts
+├── tsconfig.json
 └── package.json
 ```
 
@@ -179,13 +183,38 @@ test('Checkout flow', async ({ loggedIn, shoppingCart }) => {
 
 ### Available Fixtures
 
+**Page Objects:**
+
 - `loginPage` - Login page object
 - `dashboardPage` - Dashboard page object
 - `shoppingCart` - Shopping cart page object
-- `loggedIn` - Pre-authenticated session
-- `verifyShoppingCart` - Cart verification helper
-- `productsData` - Product test data
-- `logger` - Test execution logger (manual usage)
+
+**Authentication:**
+
+- `loggedIn` - Pre-authenticated session with standard user
+- `username` - Configurable username for login
+- `password` - Configurable password for login
+
+**Verification Helpers:**
+
+- `verifyShoppingCart(count)` - Verify shopping cart badge count
+- `verifyProductDetail(products)` - Verify product detail pages match data
+- `verifyDashboardItems()` - Verify all dashboard product items
+- `loginErrorMsg.verifyErrorMessage(text)` - Verify login error messages
+
+**Data:**
+
+- `productsData` - Extracted product data from dashboard
+
+**Logging:**
+
+- `logger` - Test execution logger (for manual custom logging)
+- `autoLogger` - Auto-fixture that logs all test executions (runs automatically)
+
+**Setup/Teardown:**
+
+- `testSetup` - Clears cookies/storage before each test (auto)
+- `workerCleanup` - Cleanup at worker level (auto)
 
 ## Configuration
 
@@ -206,17 +235,32 @@ Create `.env` file (use `.env.example` as template):
 ```env
 PASSWORD='secret_sauce'
 DASHBOARD_URL='/inventory.html'
+TOKEN_EP='submit.backtrace.io/UNIVERSE/TOKEN/json'
+DASHBOARD_PICTURE_URL='/static/media/'
 ABOUT_URL='https://saucelabs.com/'
 ```
 
+**Required:**
+
+- `PASSWORD` - Password for test users (default: 'secret_sauce')
+
+**Optional:**
+
+- `DASHBOARD_URL` - Dashboard page path
+- `ABOUT_URL` - About page URL for verification
+- `DEBUG_LOGGER` - Set to 'true' to enable logger debug output
+
 ## CI/CD
 
-GitHub Actions workflow (`.github/playwright.yml`) runs tests on every push/PR:
+GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every push/PR to `main` branch:
 
-1. Installs dependencies
-2. Runs tests on `ubuntu-latest`
-3. Uploads test reports as artifacts
-4. Stores test results in database
+1. Checks out code
+2. Sets up Node.js 24
+3. Installs dependencies with `npm ci`
+4. Installs Playwright browsers with OS dependencies
+5. Runs all tests with PASSWORD environment variable
+6. Uploads test reports as artifacts (14-day retention)
+7. Stores test results in SQLite database
 
 ## Reports
 

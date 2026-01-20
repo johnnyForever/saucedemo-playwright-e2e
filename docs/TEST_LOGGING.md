@@ -12,22 +12,35 @@ Automatically logs every test run with:
 
 ## Usage
 
-### Automatic Logging (Option 1)
+### Automatic Logging
 
-Use the logger fixture in your tests:
+All tests are automatically logged when you use the merged test fixture from `@/fixtures/index.ts`:
 
 ```typescript
-import { test, expect } from '@/fixtures/test-logger.ts';
+import { test, expect } from '@/fixtures/index.ts';
 
-test('My test', async ({ logger }) => {
+test('My test', async ({ page }) => {
   // Test runs normally
-  // Logger automatically records the result
+  // Auto-logger records the result automatically
 });
 ```
 
-### Manual Logging (Option 2)
+The `autoLogger` fixture runs in the background for every test - no need to include it in parameters!
 
-Log tests manually:
+### Manual Logging
+
+If you need to log custom events or additional test data, use the logger fixture directly:
+
+```typescript
+import { test } from '@/fixtures/index.ts';
+
+test('My test', async ({ logger }) => {
+  // Manually log custom test events
+  logger.logTest('Custom event', 'passed', 1000);
+});
+```
+
+Or log tests manually outside of fixtures:
 
 ```typescript
 import { getTestLogger } from '@/db/test-logger.ts';

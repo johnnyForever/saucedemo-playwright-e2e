@@ -20,14 +20,19 @@ export const test = base.extend<TestSetupFixtures, WorkerFixtures>({
   testSetup: [
     async ({ page }, use) => {
       await page.context().clearCookies();
-      await page.evaluate(() => {
-        localStorage.clear();
-        sessionStorage.clear();
-      });
+      try {
+        if (page.url() !== 'about:blank') {
+          await page.evaluate(() => {
+            localStorage.clear();
+            sessionStorage.clear();
+          });
+        }
+      } catch (error) {
+        console.warn('Could not clear storage:', error);
+      }
 
       await use();
     },
     { auto: true },
   ],
 });
-
