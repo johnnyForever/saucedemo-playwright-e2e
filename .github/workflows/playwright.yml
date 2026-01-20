@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   test:
-    timeout-minutes: 15
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,6 +34,10 @@ jobs:
         env:
           CI: true
           PASSWORD: 'secret_sauce'
+          DASHBOARD_URL: '/inventory.html'
+          TOKEN_EP: 'submit.backtrace.io/UNIVERSE/TOKEN/json'
+          DASHBOARD_PICTURE_URL: '/static/media/'
+          ABOUT_URL: 'https://saucelabs.com/'
 
       - name: Upload Playwright report
         if: always()
