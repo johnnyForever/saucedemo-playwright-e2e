@@ -1,5 +1,5 @@
 import { test, expect } from '@/fixtures/index.ts';
-import { SortProductsFilter} from '@/data/index.ts';
+import { SortProductsFilter } from '@/data/index.ts';
 import { ProductData } from '@/types/index.ts';
 import { sortProductData } from '@/utils/index.ts';
 import { loadUsers } from '@/db/export-users.ts';
@@ -73,11 +73,14 @@ test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashbo
   }
 
   await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+  await dashboardPage.sidebar.closeSidebar();
 
   for (const product of products) {
     await product.addToCartBtn.click();
     await verifyShoppingCart(1);
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
     await dashboardPage.sidebar.clickResetAppBtn();
+    await dashboardPage.sidebar.closeSidebar();
     await verifyShoppingCart(0);
   }
 

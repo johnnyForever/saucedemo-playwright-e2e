@@ -45,4 +45,9 @@ export class SideBar extends BaseComponent {
     await expect(this.logoutBtn).toBeEnabled();
     await this.logoutBtn.click();
   }
+
+  async closeSidebar() {
+    // Click the burger button again to close the sidebar
+    await this.sidebarBurgerButton.click();
+  }
 }
