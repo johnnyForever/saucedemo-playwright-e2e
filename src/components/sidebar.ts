@@ -4,7 +4,8 @@ import { Labels } from '@/data/index.ts';
 import { component } from '@/locators/index.ts';
 
 export class SideBar extends BaseComponent {
-  readonly sidebarBurgerButton: Locator;
+  readonly openSidebarBurger: Locator;
+  readonly closeSidebarBurger: Locator;
   readonly sidebarBurgerItems: Locator;
   readonly allItemsBtn: Locator;
   readonly aboutBtn: Locator;
@@ -13,7 +14,8 @@ export class SideBar extends BaseComponent {
 
   constructor(page: Page) {
     super(page, component.sidebar);
-    this.sidebarBurgerButton = page.getByRole('button', { name: /Open Menu/i });
+    this.openSidebarBurger = page.getByRole('button', { name: /Open Menu/i });
+    this.closeSidebarBurger = page.getByRole('button', { name: /Close Menu/i });
     this.sidebarBurgerItems = page.locator('.bm-item-list').locator('a');
     this.allItemsBtn = this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['allItems'] });
     this.aboutBtn = this.sidebarBurgerItems.filter({ hasText: Labels.sidebarElLabels['about'] });
@@ -22,7 +24,7 @@ export class SideBar extends BaseComponent {
   }
 
   async clickSidebarBtnAndVerify() {
-    await this.sidebarBurgerButton.click();
+    await this.openSidebarBurger.click();
     expect(this.expectVisible()).toBeTruthy();
     await expect.soft(this.allItemsBtn).toBeVisible();
     await expect.soft(this.aboutBtn).toBeVisible();
@@ -45,11 +47,5 @@ export class SideBar extends BaseComponent {
   async clickLogoutBtn() {
     await expect(this.logoutBtn).toBeEnabled();
     await this.logoutBtn.click();
-  }
-
-  async closeSidebar() {
-    // Press Escape key to close the sidebar
-    await this.page.keyboard.press('Escape');
-    await expect(this.root).toBeHidden();
   }
 }

@@ -15,6 +15,7 @@ export default defineConfig({
   reporter: [
     ['html', { open: 'never' }],
     ['json', { outputFile: 'results.json' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
     ['allure-playwright'],
     ['list', { printSteps: true }],
     ...(process.env.CI ? [['github'] as const] : []),

@@ -13,7 +13,7 @@ test(
       await product.addToCartBtn.click();
     }
 
-    test.step('On cart page', async () => {
+    await test.step('On cart page', async () => {
       await verifyShoppingCart(6);
       await dashboardPage.clickShoppingBasket();
       await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
@@ -23,7 +23,7 @@ test(
       await shoppingCart.cartButttons.checkoutBtn.click();
     });
 
-    test.step('On checkout page', async () => {
+    await test.step('On checkout page', async () => {
       await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
       await verifyShoppingCart(6);
       await shoppingCart.fillInCheckout(
@@ -34,7 +34,7 @@ test(
       await shoppingCart.cartButttons.continueBtn.click();
     });
 
-    test.step('Finalize order', async () => {
+    await test.step('Finalize order', async () => {
       await verifyShoppingCart(6);
       await shoppingCart.countItemsInCart(6);
       await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);

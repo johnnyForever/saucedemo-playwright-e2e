@@ -63,33 +63,33 @@ test('Sorting of dashboard products with filter', async ({ loggedIn, dashboardPa
 test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashboardItems, verifyShoppingCart }) => {
   await loggedIn.verifyDashboard();
   await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-  await dashboardPage.sidebar.closeSidebar();
+  await dashboardPage.sidebar.closeSidebarBurger.click();
+
   const products = await dashboardPage.getAllProductItems();
 
-  for (const product of products) {
-    await product.name.click();
-    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-    await dashboardPage.sidebar.clickAllItemsBtn();
-    await verifyDashboardItems();
-  }
+  await test.step('Verify all items button', async () => {
+    for (const product of products) {
+      await product.name.click();
+      await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+      await dashboardPage.sidebar.clickAllItemsBtn();
+      await verifyDashboardItems();
+    }
+  });
 
-  await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-  await dashboardPage.sidebar.closeSidebar();
+  await test.step('Verify reset app button', async () => {
+    for (const product of products) {
+      await product.addToCartBtn.click();
+      await verifyShoppingCart(1);
+      await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+      await dashboardPage.sidebar.clickResetAppBtn();
+      await dashboardPage.sidebar.closeSidebarBurger.click();
+      await verifyShoppingCart(0);
+    }
+  });
 
-  for (const product of products) {
-    await product.addToCartBtn.click();
-    await verifyShoppingCart(1);
-    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-    await dashboardPage.sidebar.clickResetAppBtn();
-    await dashboardPage.sidebar.closeSidebar();
-    await verifyShoppingCart(0);
-  }
+  await dashboardPage.page.reload({ waitUntil: 'networkidle' });
 
-  await test.step('Refresh dashboard to have add to cart buttons visible in default state', async () => {
-    await dashboardPage.page.reload({ waitUntil: 'networkidle' });
-    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-    await dashboardPage.sidebar.closeSidebar();
-
+  await test.step('Press reset app button when cart is full', async () => {
     for (let i = 0; i < EXPECTED_PRODUCT_COUNT; i++) {
       await products[i].addToCartBtn.click();
       await verifyShoppingCart(i + 1);
@@ -141,22 +141,24 @@ test('Shopping cart indication on dashboard', async ({ loggedIn, dashboardPage, 
     await verifyShoppingCart(i + 1);
   }
 
-  await products[5].addToCartBtn.click();
-  await verifyShoppingCart(4);
+  await test.step('Add items to cart by dashboard add to cart button', async () => {
+    await products[5].addToCartBtn.click();
+    await verifyShoppingCart(4);
 
-  await products[1].removeBtn.click();
-  await products[2].removeBtn.click();
-  await products[3].addToCartBtn.click();
-  await verifyShoppingCart(3);
+    await products[1].removeBtn.click();
+    await products[2].removeBtn.click();
+    await products[3].addToCartBtn.click();
+    await verifyShoppingCart(3);
 
-  await products[4].addToCartBtn.click();
-  await verifyShoppingCart(4);
+    await products[4].addToCartBtn.click();
+    await verifyShoppingCart(4);
 
-  await products[1].addToCartBtn.click();
-  await products[2].addToCartBtn.click();
-  await products[3].removeBtn.click();
-  await products[4].removeBtn.click();
-  await verifyShoppingCart(4);
+    await products[1].addToCartBtn.click();
+    await products[2].addToCartBtn.click();
+    await products[3].removeBtn.click();
+    await products[4].removeBtn.click();
+    await verifyShoppingCart(4);
+  });
 
   await test.step('Reset dashboard and cart to its default state', async () => {
     await dashboardPage.sidebar.clickSidebarBtnAndVerify();
@@ -166,34 +168,36 @@ test('Shopping cart indication on dashboard', async ({ loggedIn, dashboardPage, 
 
   await dashboardPage.page.reload({ waitUntil: 'networkidle' });
 
-  await products[2].name.click();
-  await dashboardPage.productDetail.addToCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(1);
+  await test.step('Add items to cart by item detail add to cart button', async () => {
+    await products[2].name.click();
+    await dashboardPage.productDetail.addToCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await verifyShoppingCart(1);
 
-  await products[3].name.click();
-  await dashboardPage.productDetail.addToCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await products[5].name.click();
-  await dashboardPage.productDetail.addToCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3);
+    await products[3].name.click();
+    await dashboardPage.productDetail.addToCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await products[5].name.click();
+    await dashboardPage.productDetail.addToCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await verifyShoppingCart(3);
 
-  await products[5].name.click();
-  await dashboardPage.productDetail.removeFromCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await products[4].name.click();
-  await dashboardPage.productDetail.addToCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3);
+    await products[5].name.click();
+    await dashboardPage.productDetail.removeFromCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await products[4].name.click();
+    await dashboardPage.productDetail.addToCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await verifyShoppingCart(3);
 
-  await products[3].name.click();
-  await dashboardPage.productDetail.removeFromCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(2);
+    await products[3].name.click();
+    await dashboardPage.productDetail.removeFromCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await verifyShoppingCart(2);
 
-  await products[0].name.click();
-  await dashboardPage.productDetail.addToCart.click();
-  await dashboardPage.productDetail.goBackFromItemDetail();
-  await verifyShoppingCart(3);
+    await products[0].name.click();
+    await dashboardPage.productDetail.addToCart.click();
+    await dashboardPage.productDetail.goBackFromItemDetail();
+    await verifyShoppingCart(3);
+  });
 });
