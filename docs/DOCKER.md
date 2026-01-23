@@ -137,10 +137,10 @@ jobs:
         env:
           CI: true
           PASSWORD: ${{ secrets.PASSWORD }}
-          DASHBOARD_URL: '/inventory.html'
-          TOKEN_EP: 'submit.backtrace.io/UNIVERSE/TOKEN/json'
-          DASHBOARD_PICTURE_URL: '/static/media/'
-          ABOUT_URL: 'https://saucelabs.com/'
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+          TOKEN_EP: ${{ vars.TOKEN_EP }}
+          DASHBOARD_PICTURE_URL: ${{ vars.DASHBOARD_PICTURE_URL }}
+          ABOUT_URL: ${{ vars.ABOUT_URL }}
 ```
 
 The `CI: true` environment variable enables the GitHub reporter, which automatically adds test failure annotations to the workflow run.
