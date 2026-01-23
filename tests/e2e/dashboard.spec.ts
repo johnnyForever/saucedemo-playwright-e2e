@@ -109,15 +109,17 @@ test('Logout using sidebar logout button', async ({ loggedIn, loginPage, dashboa
     await verifyShoppingCart(i + 1);
   }
 
-  await dashboardPage.sidebar.clickSidebarBtnAndVerify();
-  await dashboardPage.sidebar.clickLogoutBtn();
+  await test.step('Login/logout button works', async () => {
+    await dashboardPage.sidebar.clickSidebarBtnAndVerify();
+    await dashboardPage.sidebar.clickLogoutBtn();
 
-  await loginPage.verifyPageHeader();
-  await loginPage.verifyLoginPageContent();
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
 
-  await loginPage.fillInLoginFields(standardUser.username, standardUser.password);
-  await loginPage.loginButton.click();
-  await dashboardPage.verifyDashboard();
+    await loginPage.fillInLoginFields(standardUser.username, standardUser.password);
+    await loginPage.loginButton.click();
+    await dashboardPage.verifyDashboard();
+  });
 
   await test.step('Basket stay full after logout/login', async () => {
     await verifyShoppingCart(6);
