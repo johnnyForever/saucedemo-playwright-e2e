@@ -12,29 +12,36 @@ test(
     for (const product of products) {
       await product.addToCartBtn.click();
     }
-    await verifyShoppingCart(6);
-    await dashboardPage.clickShoppingBasket();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
-    await shoppingCart.countItemsInCart(6);
-    await verifyProductDetail(productsData);
-    await verifyShoppingCart(6);
 
-    await shoppingCart.cartButttons.checkoutBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
-    await verifyShoppingCart(6);
-    await shoppingCart.fillInCheckout(
-      checkoutUserData.valid.firstName,
-      checkoutUserData.valid.lastName,
-      checkoutUserData.valid.zipCode
-    );
-    await shoppingCart.cartButttons.continueBtn.click();
+    test.step('On cart page', async () => {
+      await verifyShoppingCart(6);
+      await dashboardPage.clickShoppingBasket();
+      await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+      await shoppingCart.countItemsInCart(6);
+      await verifyProductDetail(productsData);
+      await verifyShoppingCart(6);
+      await shoppingCart.cartButttons.checkoutBtn.click();
+    });
 
-    await verifyShoppingCart(6);
-    await shoppingCart.countItemsInCart(6);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
-    await verifyProductDetail(productsData);
-    await shoppingCart.cartButttons.finishBtn.click();
-    await shoppingCart.verifyCompleteOrderPage();
+    test.step('On checkout page', async () => {
+      await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+      await verifyShoppingCart(6);
+      await shoppingCart.fillInCheckout(
+        checkoutUserData.valid.firstName,
+        checkoutUserData.valid.lastName,
+        checkoutUserData.valid.zipCode
+      );
+      await shoppingCart.cartButttons.continueBtn.click();
+    });
+
+    test.step('Finalize order', async () => {
+      await verifyShoppingCart(6);
+      await shoppingCart.countItemsInCart(6);
+      await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
+      await verifyProductDetail(productsData);
+      await shoppingCart.cartButttons.finishBtn.click();
+      await shoppingCart.verifyCompleteOrderPage();
+    });
   }
 );
 

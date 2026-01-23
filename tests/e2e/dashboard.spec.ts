@@ -4,7 +4,7 @@ import { ProductData } from '@/types/index.ts';
 import { sortProductData } from '@/utils/index.ts';
 import { loadUsers } from '@/db/export-users.ts';
 
-const numOfProducts = 6;
+const EXPECTED_PRODUCT_COUNT = 6;
 const { standardUser } = loadUsers();
 
 test(
@@ -13,8 +13,8 @@ test(
   async ({ loggedIn, dashboardPage, productsData, verifyDashboardItems, verifyProductDetail }) => {
     await loggedIn.verifyDashboard();
     await verifyDashboardItems();
-    await dashboardPage.countInventory(numOfProducts);
-    expect(productsData).toHaveLength(numOfProducts);
+    await dashboardPage.countInventory(EXPECTED_PRODUCT_COUNT);
+    expect(productsData).toHaveLength(EXPECTED_PRODUCT_COUNT);
 
     await test.step('Compare data of each product from dashboard to what is displayed in detail', async () => {
       await verifyProductDetail(productsData);
@@ -24,8 +24,8 @@ test(
 
 test('Sorting of dashboard products with filter', async ({ loggedIn, dashboardPage, productsData }) => {
   await loggedIn.verifyDashboard();
-  await dashboardPage.countInventory(numOfProducts);
-  expect(productsData).toHaveLength(numOfProducts);
+  await dashboardPage.countInventory(EXPECTED_PRODUCT_COUNT);
+  expect(productsData).toHaveLength(EXPECTED_PRODUCT_COUNT);
 
   let defaultData: ProductData[] = productsData;
 
@@ -90,7 +90,7 @@ test('Inventory sidebar buttons', async ({ loggedIn, dashboardPage, verifyDashbo
     await dashboardPage.sidebar.clickSidebarBtnAndVerify();
     await dashboardPage.sidebar.closeSidebar();
 
-    for (let i = 0; i < numOfProducts; i++) {
+    for (let i = 0; i < EXPECTED_PRODUCT_COUNT; i++) {
       await products[i].addToCartBtn.click();
       await verifyShoppingCart(i + 1);
     }
@@ -104,7 +104,7 @@ test('Logout using sidebar logout button', async ({ loggedIn, loginPage, dashboa
   await loggedIn.verifyDashboard();
 
   const products = await dashboardPage.getAllProductItems();
-  for (let i = 0; i < numOfProducts; i++) {
+  for (let i = 0; i < EXPECTED_PRODUCT_COUNT; i++) {
     await products[i].addToCartBtn.click();
     await verifyShoppingCart(i + 1);
   }
