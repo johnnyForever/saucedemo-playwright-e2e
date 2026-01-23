@@ -6,6 +6,7 @@ export class TestLogger {
   private db: Database.Database;
   private insertLog: Database.Statement;
 
+  // Initializes the TestLogger with database connection and prepared statements
   constructor() {
     this.db = SqliteDB.getInstance();
 
@@ -15,10 +16,12 @@ export class TestLogger {
     `);
   }
 
+  // Logs a test result to the database
   logTest(testName: string, status: 'passed' | 'failed' | 'skipped', durationMs?: number, errorMessage?: string) {
     this.insertLog.run(testName, status, durationMs || null, errorMessage || null);
   }
 
+  // Retrieves the most recent test logs from the database
   getRecentLogs(limit: number = 10): TestLogRow[] {
     return this.db
       .prepare(
@@ -37,6 +40,7 @@ export class TestLogger {
       .all(limit) as TestLogRow[];
   }
 
+  // Retrieves failed test logs from the database
   getFailedTests(limit: number = 10): FailedTestRow[] {
     return this.db
       .prepare(
@@ -54,6 +58,7 @@ export class TestLogger {
       .all(limit) as FailedTestRow[];
   }
 
+  // Calculates and retrieves overall test statistics
   getTestStats(): TestStatsRow {
     return this.db
       .prepare(
@@ -75,6 +80,7 @@ export class TestLogger {
 
 let loggerInstance: TestLogger | null = null;
 
+// Returns the singleton instance of TestLogger
 export function getTestLogger(): TestLogger {
   if (!loggerInstance) {
     loggerInstance = new TestLogger();
