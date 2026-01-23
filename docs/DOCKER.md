@@ -67,10 +67,7 @@ The Docker setup will automatically load this file.
 
 **Required:**
 
-- `PASSWORD` - Password for test users
-
-**Optional (but recommended):**
-
+- `PASSWORD` - Password for test users (stored in GitHub Secrets for CI/CD)
 - `DASHBOARD_URL` - Dashboard page path for URL verification
 - `TOKEN_EP` - Token endpoint for API request verification
 - `DASHBOARD_PICTURE_URL` - Picture URL path for image verification

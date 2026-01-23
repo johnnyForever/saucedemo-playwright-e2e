@@ -242,12 +242,14 @@ ABOUT_URL='https://saucelabs.com/'
 
 **Required:**
 
-- `PASSWORD` - Password for test users (default: 'secret_sauce')
+- `PASSWORD` - Password for test users (stored in GitHub Secrets as `SAUCE_PASSWORD` for CI/CD)
+- `DASHBOARD_URL` - Dashboard page path for URL verification
+- `TOKEN_EP` - Token endpoint for API request verification
+- `DASHBOARD_PICTURE_URL` - Picture URL path for image verification
+- `ABOUT_URL` - About page URL for link verification
 
 **Optional:**
 
-- `DASHBOARD_URL` - Dashboard page path
-- `ABOUT_URL` - About page URL for verification
 - `DEBUG_LOGGER` - Set to 'true' to enable logger debug output
 
 ## CI/CD
@@ -260,7 +262,9 @@ GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every
 4. Installs Playwright browsers with OS dependencies
 5. Runs all tests with required environment variables
 6. Generates test annotations and summaries using GitHub reporter
-7. Uploads test reports as artifacts (14-day retention)
+7. Uploads HTML test reports as artifacts (14-day retention)
+8. Uploads JUnit XML reports as artifacts (14-day retention)
+9. Publishes test results with annotations using `EnricoMi/publish-unit-test-result-action`
 
 ### Viewing CI Test Results
 
@@ -275,8 +279,15 @@ After a workflow run completes, you can view test results in multiple ways:
 **2. Workflow Artifacts**
 
 - Go to the workflow run page
-- Download the `playwright-report` artifact
+- Download the `playwright-report` artifact for HTML reports
+- Download the `junit-report` artifact for JUnit XML reports
 - Extract and open `index.html` locally to view the full interactive report
+
+**3. Published Test Results**
+
+- Test results are automatically published to the workflow run
+- View detailed test summaries, pass/fail counts, and execution times
+- Published by `publish-unit-test-result-action` from JUnit reports
 
 ## Reports
 
