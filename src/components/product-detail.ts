@@ -13,11 +13,11 @@ export class ProductDetail extends BaseComponent {
 
   constructor(page: Page) {
     super(page, component.inventoryDetail);
-    ((this.name = page.locator('.inventory_details_name')),
-      (this.description = page.locator('.inventory_details_desc')),
-      (this.price = page.locator('.inventory_details_price')),
-      (this.image = page.locator('img.inventory_details_img')),
-      (this.addToCart = page.locator(`button:has-text("${Labels.elementLabels['addToCartButton']}")`)));
+    this.name = page.locator('.inventory_details_name'),
+    this.description = page.locator('.inventory_details_desc'),
+    this.price = page.locator('.inventory_details_price'),
+    this.image = page.locator('img.inventory_details_img'),
+    this.addToCart = page.locator(`button:has-text("${Labels.elementLabels['addToCartButton']}")`);
     this.removeFromCart = page.locator(`button:has-text("${Labels.elementLabels['removeButton']}")`);
   }
 
