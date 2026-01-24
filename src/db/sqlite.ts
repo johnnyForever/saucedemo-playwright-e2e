@@ -58,6 +58,8 @@ class SqliteDB {
           ['non_existing_user', 'password', 'non_existing', 'inactive'],
         ];
         usersToInsert.forEach((user) => insert.run(...user));
+      } else {
+        throw new Error('Environment variable PASSWORD is not set. No default users were inserted.');
       }
     }
     return SqliteDB.instance;

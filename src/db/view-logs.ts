@@ -10,19 +10,18 @@
  *   failed     - Show failed tests
  *   stats      - Show test statistics
  */
-
 import { getTestLogger } from '@/db/test-logger.js';
 import { TestLog } from '@/types/index.js';
 
 const logger = getTestLogger();
 const command = process.argv[2] || 'recent';
 
-console.log('\n📋 Test Logs & Cleanup Status\n');
+console.log('\nTest Logs & Cleanup Status\n');
 console.log('='.repeat(80));
 
 switch (command) {
   case 'recent': {
-    console.log('\n🕐 Recent Test Executions:\n');
+    console.log('\nRecent Test Executions:\n');
     const logs = logger.getRecentLogs(20) as unknown as TestLog[];
     if (logs.length > 0) {
       const formattedLogs = logs.map((log: TestLog) => ({
@@ -40,7 +39,7 @@ switch (command) {
   }
 
   case 'failed': {
-    console.log('\n❌ Failed Tests:\n');
+    console.log('\nFailed Tests:\n');
     const failed = logger.getFailedTests(20) as unknown as TestLog[];
     if (failed.length > 0) {
       const formattedFailed = failed.map((test: TestLog) => ({
@@ -68,18 +67,16 @@ switch (command) {
 
   default:
     console.log(`
-❌ Unknown command: ${command}
-
+Unknown command: ${command}
 Available commands:
   recent     - Show recent test executions
   failed     - Show failed tests
   stats      - Show test statistics
-
 Examples:
   npx tsx src/db/view-logs.ts recent
   npx tsx src/db/view-logs.ts failed
-  npx tsx src/db/view-logs.ts stats
-    `);
+  npx tsx src/db/view-logs.ts stats`
+);
 }
 
 console.log('\n' + '='.repeat(80) + '\n');
