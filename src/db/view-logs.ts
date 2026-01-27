@@ -10,6 +10,7 @@
  *   failed     - Show failed tests
  *   stats      - Show test statistics
  */
+import 'dotenv/config';
 import { getTestLogger } from '@/db/test-logger.js';
 import { TestLog } from '@/types/index.js';
 
