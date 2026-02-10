@@ -16,30 +16,30 @@ test(
     await test.step('On cart page', async () => {
       await verifyShoppingCart(6);
       await dashboardPage.clickShoppingBasket();
-      await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+      await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
       await shoppingCart.countItemsInCart(6);
       await verifyProductDetail(productsData);
       await verifyShoppingCart(6);
-      await shoppingCart.cartButttons.checkoutBtn.click();
+      await shoppingCart.cartButtons.checkoutBtn.click();
     });
 
     await test.step('On checkout page', async () => {
-      await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+      await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
       await verifyShoppingCart(6);
       await shoppingCart.fillInCheckout(
         checkoutUserData.valid.firstName,
         checkoutUserData.valid.lastName,
         checkoutUserData.valid.zipCode
       );
-      await shoppingCart.cartButttons.continueBtn.click();
+      await shoppingCart.cartButtons.continueBtn.click();
     });
 
     await test.step('Finalize order', async () => {
       await verifyShoppingCart(6);
       await shoppingCart.countItemsInCart(6);
-      await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
+      await shoppingCart.assertCartTitle(Labels.shoppingCart['overviewTitle']);
       await verifyProductDetail(productsData);
-      await shoppingCart.cartButttons.finishBtn.click();
+      await shoppingCart.cartButtons.finishBtn.click();
       await shoppingCart.verifyCompleteOrderPage();
     });
   }
@@ -53,11 +53,11 @@ test('Checkout information error messages validations', async ({
 }) => {
   await loggedIn.verifyDashboard();
   await dashboardPage.clickShoppingBasket();
-  await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+  await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
   await shoppingCart.countItemsInCart(0);
   await verifyShoppingCart(0);
-  await shoppingCart.cartButttons.checkoutBtn.click();
-  await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+  await shoppingCart.cartButtons.checkoutBtn.click();
+  await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
 
   await test.step('Verify missing postal code message', async () => {
     await shoppingCart.fillInCheckout(
@@ -65,44 +65,44 @@ test('Checkout information error messages validations', async ({
       checkoutUserData.emptyZipCode.lastName,
       checkoutUserData.emptyZipCode.zipCode
     );
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['postalCodeRequired']);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
   });
   await test.step('Verify missing fisrt name message', async () => {
     await shoppingCart.userData.zipCode.fill(checkoutUserData.valid.zipCode);
     await shoppingCart.userData.firstName.clear();
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['firstNameRequired']);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
   });
 
   await test.step('Verify missing last name message', async () => {
     await shoppingCart.userData.firstName.fill(checkoutUserData.valid.firstName);
     await shoppingCart.userData.lastName.clear();
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['lastNameRequired']);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
   });
 
-  await shoppingCart.cartButttons.cancelBtn.click();
-  await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
-  await shoppingCart.cartButttons.checkoutBtn.click();
-  await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+  await shoppingCart.cartButtons.cancelBtn.click();
+  await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
+  await shoppingCart.cartButtons.checkoutBtn.click();
+  await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
 
   await test.step('Verify missing last name message when only first name is filled in', async () => {
     await shoppingCart.userData.firstName.fill(checkoutUserData.valid.firstName);
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['lastNameRequired']);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
   });
   await test.step('Verify missing first name message when second name and zip code is filled in', async () => {
     await shoppingCart.userData.firstName.clear();
     await shoppingCart.userData.lastName.fill(checkoutUserData.valid.firstName);
     await shoppingCart.userData.zipCode.fill(checkoutUserData.valid.zipCode);
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
     await shoppingCart.verifyErrorMessage(Labels.errorMessages['firstNameRequired']);
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
   });
 });
 
@@ -119,7 +119,7 @@ test('Add and remove items from cart', async ({ loggedIn, dashboardPage, shoppin
 
   await test.step('Navigate to cart', async () => {
     await dashboardPage.clickShoppingBasket();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(3);
   });
 
@@ -162,12 +162,12 @@ test('Continue shopping from cart page', async ({ loggedIn, dashboardPage, shopp
 
   await test.step('Go to cart', async () => {
     await dashboardPage.clickShoppingBasket();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(2);
   });
 
   await test.step('Click continue shopping button', async () => {
-    await shoppingCart.cartButttons.continueShoppingBtn.click();
+    await shoppingCart.cartButtons.continueShoppingBtn.click();
     await dashboardPage.verifyDashboard();
     await verifyShoppingCart(2);
   });
@@ -179,7 +179,7 @@ test('Continue shopping from cart page', async ({ loggedIn, dashboardPage, shopp
 
   await test.step('Go back to cart and verify all items are still there', async () => {
     await dashboardPage.clickShoppingBasket();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(3);
     await verifyShoppingCart(3);
   });
@@ -200,44 +200,44 @@ test('Cancel checkout at different stages and verify cart state', async ({
     await verifyShoppingCart(2);
   });
   await dashboardPage.clickShoppingBasket();
-  await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+  await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
   await shoppingCart.countItemsInCart(2);
 
   await test.step('Go to checkout and cancel', async () => {
-    await shoppingCart.cartButttons.checkoutBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
-    await shoppingCart.cartButttons.cancelBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.cartButtons.checkoutBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.cartButtons.cancelBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(2);
     await verifyShoppingCart(2);
   });
 
   await test.step('Go to checkout, fill in data, then cancel', async () => {
-    await shoppingCart.cartButttons.checkoutBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.cartButtons.checkoutBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
     await shoppingCart.fillInCheckout(
       checkoutUserData.valid.firstName,
       checkoutUserData.valid.lastName,
       checkoutUserData.valid.zipCode
     );
-    await shoppingCart.cartButttons.cancelBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.cartButtons.cancelBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(2);
     await verifyShoppingCart(2);
   });
 
   await test.step('Complete checkout flow to overview and then cancel', async () => {
-    await shoppingCart.cartButttons.checkoutBtn.click();
+    await shoppingCart.cartButtons.checkoutBtn.click();
     await shoppingCart.fillInCheckout(
       checkoutUserData.valid.firstName,
       checkoutUserData.valid.lastName,
       checkoutUserData.valid.zipCode
     );
-    await shoppingCart.cartButttons.continueBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
+    await shoppingCart.cartButtons.continueBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['overviewTitle']);
     await shoppingCart.countItemsInCart(2);
     await verifyShoppingCart(2);
-    await shoppingCart.cartButttons.cancelBtn.click();
+    await shoppingCart.cartButtons.cancelBtn.click();
     await dashboardPage.verifyDashboard();
     await verifyShoppingCart(2);
   });
@@ -261,7 +261,7 @@ test('Complete order with single item', async ({
 
   await test.step('Navigate to cart', async () => {
     await dashboardPage.clickShoppingBasket();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['yourCartTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['yourCartTitle']);
     await shoppingCart.countItemsInCart(1);
   });
 
@@ -269,25 +269,25 @@ test('Complete order with single item', async ({
   await verifyProductDetail(singleProduct);
 
   await test.step('Proceed to checkout', async () => {
-    await shoppingCart.cartButttons.checkoutBtn.click();
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['checkoutTitle']);
+    await shoppingCart.cartButtons.checkoutBtn.click();
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['checkoutTitle']);
     await shoppingCart.fillInCheckout(
       checkoutUserData.valid.firstName,
       checkoutUserData.valid.lastName,
       checkoutUserData.valid.zipCode
     );
-    await shoppingCart.cartButttons.continueBtn.click();
+    await shoppingCart.cartButtons.continueBtn.click();
   });
 
   await test.step('Verify overview', async () => {
-    await shoppingCart.assertCartTittle(Labels.shoppingCart['overviewTitle']);
+    await shoppingCart.assertCartTitle(Labels.shoppingCart['overviewTitle']);
     await shoppingCart.countItemsInCart(1);
     await verifyProductDetail(singleProduct);
     await verifyShoppingCart(1);
   });
 
   await test.step('Complete order', async () => {
-    await shoppingCart.cartButttons.finishBtn.click();
+    await shoppingCart.cartButtons.finishBtn.click();
     await shoppingCart.verifyCompleteOrderPage();
   });
 });

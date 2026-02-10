@@ -1,5 +1,4 @@
 import { test as base, type Locator } from '@playwright/test';
-import { logAllProductData } from '@/utils/index.ts';
 import { ProductData } from '@/types/index.ts';
 import { DashboardPage } from '@/pages/index.ts';
 

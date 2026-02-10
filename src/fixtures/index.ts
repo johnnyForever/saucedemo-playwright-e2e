@@ -18,7 +18,7 @@ export const test = mergeTests(
   verifyProductDetail,
   verifyShoppingCart,
   testLogger,
-  globalSetup
+  globalSetup,
 );
 
 export { expect } from '@playwright/test';

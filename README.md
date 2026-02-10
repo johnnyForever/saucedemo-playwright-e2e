@@ -46,6 +46,9 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
    # Smoke tests only
    npm run test:smoke
 
+   # Security tests only
+   npm run test:security
+
    # Specific browser
    npx playwright test --project=chromium
    ```
@@ -351,12 +354,15 @@ docker-compose down -v
 ## Test Tags
 
 - `@smoke` - Critical path tests (login, checkout)
+- `@security` - Security tests (SQL injection, XSS, input validation)
 
 Run specific tags:
 
 ```bash
 npm run test:smoke
-npx playwright test --grep @smoke
+npm run test:security
+npx playwright test --grep '@smoke'
+npx playwright test --grep '@security'
 ```
 
 ## License

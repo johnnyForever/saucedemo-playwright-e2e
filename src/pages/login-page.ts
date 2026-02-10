@@ -35,7 +35,7 @@ export class LoginPage {
   }
 
   async clickLoginBtnAndVerifyApi() {
-    await Promise.all([
+    Promise.all([
       this.page.waitForRequest((req) => req.url().includes(process.env.TOKEN_EP!), { timeout: 10_000 }),
       await this.loginButton.click(),
     ]);

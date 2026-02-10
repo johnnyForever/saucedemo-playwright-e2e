@@ -29,7 +29,7 @@ export const Labels = {
     completeOrder: 'Thank you for your order!',
     completeOrderFullText: 'Your order has been dispatched, and will arrive just as fast as the pony can get there!',
     goHomeBtn: 'Back Home',
-    chcekoutButton: 'Checkout',
+    checkoutButton: 'Checkout',
     finishButton: 'Finish',
   },
 } as const;

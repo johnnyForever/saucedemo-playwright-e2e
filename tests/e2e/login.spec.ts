@@ -121,3 +121,93 @@ test('Input special characters to username and password fields', async ({ loginP
   await loginPage.passwordField.fill(testInputs.specialCharacters);
   await expect.soft(loginPage.passwordField).toHaveValue(testInputs.specialCharacters);
 });
+
+test('SQL injection attempt should not compromise the application', { tag: '@security' }, async ({ loginPage, loginErrorMsg }) => {
+  await loginPage.openSaucedemoUrl();
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+
+  await test.step('Attempt SQL injection in username field', async () => {
+    await loginPage.usernameField.fill(testInputs.sqlInjection);
+    await loginPage.passwordField.fill('password');
+    await loginPage.loginButton.click();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+  });
+
+  await test.step('Attempt SQL injection in password field', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.clear();
+    await loginPage.usernameField.fill('testuser');
+    await loginPage.passwordField.fill(testInputs.sqlInjection);
+    await loginPage.loginButton.click();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+  });
+
+  await test.step('Attempt SQL injection in both fields', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.clear();
+    await loginPage.usernameField.fill(testInputs.sqlInjection);
+    await loginPage.passwordField.fill(testInputs.sqlInjection);
+    await loginPage.loginButton.click();
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+  });
+
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+});
+
+test('XSS attack attempt should be safely handled', { tag: '@security' }, async ({ loginPage, loginErrorMsg }) => {
+  await loginPage.openSaucedemoUrl();
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+
+  await test.step('Attempt XSS in username field', async () => {
+    await loginPage.usernameField.fill(testInputs.xssAttempt);
+    await expect.soft(loginPage.usernameField).toHaveValue(testInputs.xssAttempt);
+    await loginPage.passwordField.fill('password');
+    await loginPage.loginButton.click();
+    
+    // Verify the application handles the XSS attempt safely
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+  });
+
+  await test.step('Verify no script execution occurred', async () => {
+    await loginPage.verifyPageHeader();
+    await loginPage.verifyLoginPageContent();
+  });
+
+  await test.step('Attempt XSS in password field', async () => {
+    await loginPage.usernameField.clear();
+    await loginPage.passwordField.clear();
+    await loginPage.usernameField.fill('testuser');
+    await loginPage.passwordField.fill(testInputs.xssAttempt);
+    await expect.soft(loginPage.passwordField).toHaveValue(testInputs.xssAttempt);
+    await loginPage.loginButton.click();
+    
+    expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['nonExistingUser'])).toBe(true);
+  });
+
+  // Final verification that page remains functional
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+});
+
+test('Long input strings should be handled gracefully', { tag: '@security' }, async ({ loginPage }) => {
+  await loginPage.openSaucedemoUrl();
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+
+  await test.step('Input very long text in username field', async () => {
+    await loginPage.usernameField.fill(testInputs.longText);
+    await expect.soft(loginPage.usernameField).toHaveValue(testInputs.longText);
+  });
+
+  await test.step('Input very long text in password field', async () => {
+    await loginPage.passwordField.fill(testInputs.longText);
+    await expect.soft(loginPage.passwordField).toHaveValue(testInputs.longText);
+  });
+
+  // Verify page remains stable
+  await loginPage.verifyPageHeader();
+  await loginPage.verifyLoginPageContent();
+});

@@ -23,7 +23,7 @@ console.log('='.repeat(80));
 switch (command) {
   case 'recent': {
     console.log('\nRecent Test Executions:\n');
-    const logs = logger.getRecentLogs(20) as unknown as TestLog[];
+    const logs = logger.getRecentLogs(20) as TestLog[];
     if (logs.length > 0) {
       const formattedLogs = logs.map((log: TestLog) => ({
         test_name: log.test_name,

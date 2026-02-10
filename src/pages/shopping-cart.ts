@@ -5,11 +5,11 @@ import { hexToRgb } from '@/utils/index.ts';
 
 export class ShoppingCart {
   readonly page: Page;
-  readonly cartTittle: Locator;
+  readonly cartTitle: Locator;
   readonly productsItems: Locator;
   readonly orderCompleted: { header: Locator; fullText: Locator; goHomeButton: Locator };
   readonly userData: { firstName: Locator; lastName: Locator; zipCode: Locator };
-  readonly cartButttons: {
+  readonly cartButtons: {
     continueShoppingBtn: Locator;
     continueBtn: Locator;
     checkoutBtn: Locator;
@@ -20,17 +20,17 @@ export class ShoppingCart {
 
   constructor(page: Page) {
     this.page = page;
-    this.cartTittle = this.page.getByTestId('title');
+    this.cartTitle = this.page.getByTestId('title');
     this.productsItems = this.page.locator(locators.component.inventoryItem);
     this.orderCompleted = locators.completeOrder(this.page);
     this.userData = locators.userCheckoutData(this.page);
-    this.cartButttons = locators.cartButttons(this.page);
+    this.cartButtons = locators.cartButtons(this.page);
     this.errorMessage = this.page.locator('.error-message-container.error');
   }
 
-  async assertCartTittle(title: string) {
-    await expect(this.cartTittle).toBeVisible();
-    await expect(this.cartTittle).toHaveText(`${title}`);
+  async assertCartTitle(title: string) {
+    await expect(this.cartTitle).toBeVisible();
+    await expect(this.cartTitle).toHaveText(`${title}`);
   }
 
   async countItemsInCart(expected: number) {
@@ -53,7 +53,7 @@ export class ShoppingCart {
   }
 
   async verifyCompleteOrderPage() {
-    await this.assertCartTittle(Labels.shoppingCart['orderCompleteTitle']);
+    await this.assertCartTitle(Labels.shoppingCart['orderCompleteTitle']);
     await expect.soft(this.orderCompleted.header).toHaveText(Labels.shoppingCart['completeOrder']);
     await expect.soft(this.orderCompleted.fullText).toHaveText(Labels.shoppingCart['completeOrderFullText']);
     await expect.soft(this.orderCompleted.goHomeButton).toBeVisible();
