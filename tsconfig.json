@@ -11,10 +11,9 @@
     "allowImportingTsExtensions": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "noEmit": true,
     "paths": {
-       "@/*": ["src/*"],                
+       "@/*": ["./src/*"]
       },
     "types": ["node", "@playwright/test"],
   },
