@@ -116,35 +116,6 @@ docker run --rm \
 docker run -it --rm saucedemo-e2e sh
 ```
 
-## CI/CD Integration
-
-### GitHub Actions
-
-The Docker image can be used in GitHub Actions. The project uses Playwright's built-in GitHub reporter for test annotations:
-
-```yaml
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.57.0-noble
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm ci
-      - name: Run tests
-        run: npm test
-        env:
-          CI: true
-          PASSWORD: ${{ secrets.PASSWORD }}
-          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
-          TOKEN_EP: ${{ vars.TOKEN_EP }}
-          DASHBOARD_PICTURE_URL: ${{ vars.DASHBOARD_PICTURE_URL }}
-          ABOUT_URL: ${{ vars.ABOUT_URL }}
-```
-
-The `CI: true` environment variable enables the GitHub reporter, which automatically adds test failure annotations to the workflow run.
-
 ## Troubleshooting
 
 ### Permission issues on Linux

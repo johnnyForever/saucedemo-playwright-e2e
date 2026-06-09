@@ -4,7 +4,7 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
 
 ## Features
 
-- **Playwright 1.57.0** - Modern browser automation
+- **Playwright** - Modern browser automation
 - **TypeScript** - Type-safe test code
 - **Page Object Model** - Maintainable test architecture
 - **Custom Fixtures** - Reusable test components
@@ -149,40 +149,6 @@ The logger tracks:
 - Execution timestamp
 
 See [docs/TEST_LOGGING.md](docs/TEST_LOGGING.md) for details.
-
-## Writing Tests
-
-### Basic Test Structure
-
-```typescript
-import { test, expect } from '@/fixtures/index.ts';
-import { Labels, checkoutUserData } from '@/data/index.ts';
-
-test('My test', async ({ loginPage, dashboardPage }) => {
-  await loginPage.openSaucedemoUrl();
-  await loginPage.fillInLoginFields('standard_user', 'secret_sauce');
-  await loginPage.loginButton.click();
-  await dashboardPage.verifyDashboard();
-});
-```
-
-### Using Test Steps
-
-```typescript
-test('Checkout flow', async ({ loggedIn, shoppingCart }) => {
-  await test.step('Add items to cart', async () => {
-    // ...
-  });
-
-  await test.step('Complete checkout', async () => {
-    await shoppingCart.fillInCheckout(
-      checkoutUserData.valid.firstName,
-      checkoutUserData.valid.lastName,
-      checkoutUserData.valid.zipCode
-    );
-  });
-});
-```
 
 ### Available Fixtures
 
