@@ -12,11 +12,6 @@
 /allure-results/
 /results.json
 
-# Database
-*.db
-*.db-shm
-*.db-wal
-
 # Environment variables
 .env
 .env.local

@@ -21,20 +21,7 @@ services:
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
       - ./allure-report:/app/allure-report
-      # Mount database to persist logs
-      - ./playwright.db:/app/playwright.db
     command: npm test
-
-  # Service for viewing test logs
-  logs-viewer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./playwright.db:/app/playwright.db
-    command: npm run logs
-    profiles:
-      - tools
 
   # Service for running smoke tests only
   smoke-tests:
@@ -46,7 +33,6 @@ services:
     volumes:
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results
-      - ./playwright.db:/app/playwright.db
     command: npm run test:smoke
     profiles:
       - smoke

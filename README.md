@@ -1,6 +1,6 @@
 # Saucedemo E2E Testing with Playwright
 
-End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using Playwright and TypeScript. This project demonstrates a complete testing setup with Page Object Model, custom fixtures, test execution logging, and Docker support.
+End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using Playwright and TypeScript. This project demonstrates a complete testing setup with Page Object Model, custom fixtures, and Docker support.
 
 ## Features
 
@@ -8,7 +8,6 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
 - **TypeScript** - Type-safe test code
 - **Page Object Model** - Maintainable test architecture
 - **Custom Fixtures** - Reusable test components
-- **SQLite Test Logging** - Track test execution history
 - **Docker Support** - Containerized testing
 - **Allure Reports** - Detailed test reporting
 - **GitHub Actions** - CI/CD with automated test reporting and annotations
@@ -58,11 +57,6 @@ End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using
    ```bash
    # Open HTML report
    npm run report
-
-   # View test logs from database
-   npm run logs
-   npm run logs:failed
-   npm run logs:stats
    ```
 
 ## Project Structure
@@ -72,15 +66,14 @@ saucedemo-e2e/
 ├── src/
 │   ├── components/     # Reusable UI components
 │   ├── data/           # Test data, labels, and centralized test inputs
-│   ├── db/             # SQLite database utilities and queries
 │   ├── fixtures/       # Custom Playwright fixtures
 │   ├── locators/       # Page element locators
 │   ├── pages/          # Page Object Model classes
 │   ├── types/          # TypeScript type definitions
-│   └── utils/          # Helper functions (sorting, colors, logging)
+│   └── utils/          # Helper functions (sorting, colors)
 ├── tests/
 │   └── e2e/           # Test specifications
-├── docs/              # Documentation (TEST_LOGGING.md, DOCKER.md)
+├── docs/              # Documentation (DOCKER.md)
 ├── .github/
 │   └── workflows/     # GitHub Actions CI/CD
 ├── playwright.config.ts
@@ -120,35 +113,7 @@ npm run docker:smoke
 
 # Access container shell
 npm run docker:shell
-
-# View logs
-npm run docker:logs
 ```
-
-## Test Logging
-
-Every test execution is automatically logged to SQLite database (`playwright.db`). View logs using:
-
-```bash
-# Recent test executions
-npm run logs
-
-# Failed tests only
-npm run logs:failed
-
-# Test statistics
-npm run logs:stats
-```
-
-The logger tracks:
-
-- Test name
-- Status (passed/failed/skipped)
-- Duration
-- Error messages
-- Execution timestamp
-
-See [docs/TEST_LOGGING.md](docs/TEST_LOGGING.md) for details.
 
 ### Available Fixtures
 
@@ -174,11 +139,6 @@ See [docs/TEST_LOGGING.md](docs/TEST_LOGGING.md) for details.
 **Data:**
 
 - `productsData` - Extracted product data from dashboard
-
-**Logging:**
-
-- `logger` - Test execution logger (for manual custom logging)
-- `autoLogger` - Auto-fixture that logs all test executions (runs automatically)
 
 **Setup/Teardown:**
 
@@ -217,10 +177,6 @@ ABOUT_URL='https://saucelabs.com/'
 - `DASHBOARD_PICTURE_URL` - Picture URL path for image verification
 - `ABOUT_URL` - About page URL for link verification
 
-**Optional:**
-
-- `DEBUG_LOGGER` - Set to 'true' to enable logger debug output
-
 ## CI/CD
 
 GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every push/PR to `main` branch:
@@ -233,7 +189,6 @@ GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every
 6. Generates test annotations and summaries using GitHub reporter
 7. Uploads HTML test reports as artifacts (14-day retention)
 8. Uploads JUnit XML reports as artifacts (14-day retention)
-9. Publishes test results with annotations using `EnricoMi/publish-unit-test-result-action`
 
 ### Viewing CI Test Results
 
@@ -274,14 +229,6 @@ npx allure generate allure-results --clean
 npx allure open allure-report
 ```
 
-### Database Logs
-
-```bash
-npm run logs           # Recent executions
-npm run logs:failed    # Failed tests
-npm run logs:stats     # Statistics
-```
-
 ## Troubleshooting
 
 ### Tests Failing Locally
@@ -289,15 +236,6 @@ npm run logs:stats     # Statistics
 1. Clear test data: `npm run clean`
 2. Reinstall browsers: `npx playwright install`
 3. Check `.env` file exists and has correct PASSWORD
-
-### Database Locked
-
-```bash
-# Stop any running processes
-# Delete database
-rm playwright.db
-# Run tests again - database will be recreated
-```
 
 ### Docker Issues
 
@@ -308,14 +246,6 @@ docker-compose build --no-cache
 # Clean up
 docker-compose down -v
 ```
-
-## Contributing
-
-1. Create feature branch
-2. Write tests with proper test.step() organization
-3. Ensure all tests pass locally
-4. Update documentation if needed
-5. Submit pull request
 
 ## Test Tags
 

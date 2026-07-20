@@ -1,6 +1,6 @@
 import { test, expect } from '@/fixtures/index.ts';
 import { Labels, testInputs } from '@/data/index.ts';
-import { loadUsers } from '@/db/export-users.ts';
+import { loadUsers } from '@/data/users.ts';
 
 const { activeUsers, standardUser, lockedUser, nonExistingUser } = loadUsers();
 
@@ -42,7 +42,7 @@ test('Login with missing password or username', async ({ loginPage, loginErrorMs
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
   await loginPage.loginButton.click();
-  expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['usernameRequired'])).toBe(true);
+  expect.soft(loginErrorMsg.verifyErrorMessage(Labels.errorMessages['usernameRequired'])).toBe(true);
 
   await test.step('Login is not possible without password', async () => {
     await loginPage.usernameField.fill(standardUser.username);
@@ -75,7 +75,7 @@ test('Locked out and non existing user cannot login', async ({ loginPage, loginE
   await loginPage.verifyPageHeader();
   await loginPage.verifyLoginPageContent();
 
-  await test.step('Locked out user cannot login and correct error is displayed', async () => {
+  test.step('Locked out user cannot login and correct error is displayed', async () => {
     await loginPage.fillInLoginFields(lockedUser.username, lockedUser.password);
     await loginPage.clickLoginBtnAndVerifyApi();
     expect.soft(await loginErrorMsg.verifyErrorMessage(Labels.errorMessages['lockedOutUser'])).toBe(true);

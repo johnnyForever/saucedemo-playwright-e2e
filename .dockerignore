@@ -11,11 +11,6 @@ allure-report/
 allure-results/
 .playwright/
 
-# Database
-*.db
-*.db-shm
-*.db-wal
-
 # Environment
 .env.local
 .env.*.local

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  // Required variables
   PASSWORD: z.string().min(1, 'PASSWORD is required'),
   DASHBOARD_URL: z.string().min(1, 'DASHBOARD_URL is required'),
   TOKEN_EP: z.string().min(1, 'TOKEN_EP is required'),
@@ -21,7 +20,6 @@ export function validateEnv(): EnvConfig {
 
     throw new Error(
       `Environment validation failed:\n${formattedErrors}\n\n` +
-        'Please ensure all required environment variables are set in your .env file.\n' +
         'See .env.example for reference.'
     );
   }

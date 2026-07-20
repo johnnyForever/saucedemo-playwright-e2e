@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
 import { LoginPage, DashboardPage } from '@/pages/index.ts';
-import { loadUsers } from '@/db/export-users.ts';
+import { loadUsers } from '@/data/users.ts';
 
 const { standardUser } = loadUsers();
 

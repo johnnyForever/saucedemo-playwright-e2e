@@ -8,19 +8,15 @@
   },
   "scripts": {
     "test": "npx playwright test",
-    "test:smoke": "npx playwright test --grep '@smoke' --project=chromium",
-    "test:security": "npx playwright test --grep '@security' --project=chromium",
+    "test:smoke": "npx playwright test --grep smoke --project=chromium",
+    "test:security": "npx playwright test --grep security --project=chromium",
     "test:regression": "npx playwright test --grep '@regression'",
     "report": "playwright show-report",
     "test:report": "playwright test && playwright show-report",
-    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright || rm playwright.db",
-    "logs": "npx tsx src/db/view-logs.ts",
-    "logs:failed": "npx tsx src/db/view-logs.ts failed",
-    "logs:stats": "npx tsx src/db/view-logs.ts stats",
+    "clean": "rm -rf playwright-report test-results .playwright || del /s /q playwright-report test-results .playwright",
     "docker:build": "docker build -t saucedemo-e2e .",
     "docker:test": "docker-compose up --build playwright-tests",
     "docker:smoke": "docker-compose --profile smoke up --build smoke-tests",
-    "docker:logs": "docker-compose --profile tools run --rm logs-viewer",
     "docker:shell": "docker-compose run --rm playwright-tests sh"
   },
   "repository": {
@@ -41,7 +37,6 @@
     "@axe-core/playwright": "^4.11.1",
     "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.58.2",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
@@ -57,7 +52,6 @@
     "typescript-eslint": "^8.52.0"
   },
   "dependencies": {
-    "better-sqlite3": "^12.5.0",
     "zod": "^4.3.6"
   }
 }

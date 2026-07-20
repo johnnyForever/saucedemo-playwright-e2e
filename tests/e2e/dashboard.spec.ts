@@ -2,7 +2,7 @@ import { test, expect } from '@/fixtures/index.ts';
 import { SortProductsFilter } from '@/data/index.ts';
 import { ProductData } from '@/types/index.ts';
 import { sortProductData } from '@/utils/index.ts';
-import { loadUsers } from '@/db/export-users.ts';
+import { loadUsers } from '@/data/users.ts';
 
 const EXPECTED_PRODUCT_COUNT = 6;
 const { standardUser } = loadUsers();
