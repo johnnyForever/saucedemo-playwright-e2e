@@ -190,29 +190,6 @@ GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every
 7. Uploads HTML test reports as artifacts (14-day retention)
 8. Uploads JUnit XML reports as artifacts (14-day retention)
 
-### Viewing CI Test Results
-
-After a workflow run completes, you can view test results in multiple ways:
-
-**1. GitHub Annotations (Inline)**
-
-- Test failures appear as annotations directly in the workflow run
-- Click on failed tests to see error messages and stack traces
-- File and line links navigate directly to the source code
-
-**2. Workflow Artifacts**
-
-- Go to the workflow run page
-- Download the `playwright-report` artifact for HTML reports
-- Download the `junit-report` artifact for JUnit XML reports
-- Extract and open `index.html` locally to view the full interactive report
-
-**3. Published Test Results**
-
-- Test results are automatically published to the workflow run
-- View detailed test summaries, pass/fail counts, and execution times
-- Published by `publish-unit-test-result-action` from JUnit reports
-
 ## Reports
 
 ### HTML Report
