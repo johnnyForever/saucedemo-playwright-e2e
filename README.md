@@ -169,14 +169,6 @@ DASHBOARD_PICTURE_URL='/static/media/'
 ABOUT_URL='https://saucelabs.com/'
 ```
 
-**Required:**
-
-- `PASSWORD` - Password for test users (stored in GitHub Secrets as `SAUCE_PASSWORD` for CI/CD)
-- `DASHBOARD_URL` - Dashboard page path for URL verification
-- `TOKEN_EP` - Token endpoint for API request verification
-- `DASHBOARD_PICTURE_URL` - Picture URL path for image verification
-- `ABOUT_URL` - About page URL for link verification
-
 ## CI/CD
 
 GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every push/PR to `main` branch:
@@ -187,8 +179,8 @@ GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every
 4. Installs Playwright browsers with OS dependencies
 5. Runs all tests with required environment variables
 6. Generates test annotations and summaries using GitHub reporter
-7. Uploads HTML test reports as artifacts (14-day retention)
-8. Uploads JUnit XML reports as artifacts (14-day retention)
+7. Uploads HTML test reports as artifacts 
+8. Uploads JUnit XML reports as artifacts
 
 ## Reports
 
@@ -205,29 +197,6 @@ npm run report
 npx allure generate allure-results --clean
 npx allure open allure-report
 ```
-
-## Troubleshooting
-
-### Tests Failing Locally
-
-1. Clear test data: `npm run clean`
-2. Reinstall browsers: `npx playwright install`
-3. Check `.env` file exists and has correct PASSWORD
-
-### Docker Issues
-
-```bash
-# Rebuild image
-docker-compose build --no-cache
-
-# Clean up
-docker-compose down -v
-```
-
-## Test Tags
-
-- `@smoke` - Critical path tests (login, checkout)
-- `@security` - Security tests (SQL injection, XSS, input validation)
 
 Run specific tags:
 
