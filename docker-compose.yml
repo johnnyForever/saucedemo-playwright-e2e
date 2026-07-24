@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   playwright-tests:
     healthcheck:
@@ -11,25 +9,32 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      - CI=true
       - PASSWORD=${PASSWORD:-secret_sauce}
+      - DASHBOARD_URL=${DASHBOARD_URL:-}
+      - TOKEN_EP=${TOKEN_EP:-}
+      - DASHBOARD_PICTURE_URL=${DASHBOARD_PICTURE_URL:-}
+      - ABOUT_URL=${ABOUT_URL:-}
     volumes:
-      # Mount source code for live changes during development
       - ./src:/app/src
       - ./tests:/app/tests
-      # Mount output directories to host
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
       - ./allure-report:/app/allure-report
     command: npm test
 
-  # Service for running smoke tests only
   smoke-tests:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
+      - CI=true
       - PASSWORD=${PASSWORD:-secret_sauce}
+      - DASHBOARD_URL=${DASHBOARD_URL:-}
+      - TOKEN_EP=${TOKEN_EP:-}
+      - DASHBOARD_PICTURE_URL=${DASHBOARD_PICTURE_URL:-}
+      - ABOUT_URL=${ABOUT_URL:-}
     volumes:
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results

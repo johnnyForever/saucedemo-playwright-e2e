@@ -22,21 +22,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers + OS dependencies
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Build and run Playwright smoke tests in Docker
+        run: docker compose --profile smoke run --rm smoke-tests
         env:
-          CI: true
           PASSWORD: ${{ secrets.SAUCE_PASSWORD }}
           DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
           TOKEN_EP: ${{ vars.TOKEN_EP }}
