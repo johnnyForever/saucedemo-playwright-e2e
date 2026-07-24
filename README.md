@@ -1,6 +1,6 @@
 # Saucedemo E2E Testing with Playwright
 
-End-to-end test automation for [saucedemo.com](https://www.saucedemo.com/) using Playwright and TypeScript. This project demonstrates a complete testing setup with Page Object Model, custom fixtures, and Docker support.
+This isend-to-end test automation framework built with Playwright and TypeScript for testing [saucedemo.com](https://www.saucedemo.com/), a demo e-commerce application created by Sauce Labs. This project was created as a showcase of modern test automation best practices, demonstrating how to build a maintainable, scalable, and production-ready testing solution. The architecture follows the Page Object Model (POM) design pattern with dedicated pages for Login, Dashboard, and Shopping Cart functionality, ensuring test code remains clean and reusable. Custom Playwright fixtures extend the framework with pre-configured states like loggedIn, loginErrorMsg, and verifyDashboardItems, enabling efficient test setup and teardown.The test suite covers critical user flows including authentication (successful logins, error handling, locked users), dashboard verification, and shopping cart operations. Tests are organized with tags like @smoke, @security, and @regression for selective execution, and the framework supports data-driven testing with multiple user accounts loaded from centralized test data.Cross-browser testing is achieved through Playwright projects targeting Chromium, Firefox, and WebKit on desktop, plus mobile emulation for Pixel 5 and iPhone 12 devices. The configuration includes intelligent retry logic (2 retries in CI), tracing, video recording on failure, and screenshots for debugging. Docker support provides containerized test execution using the official Playwright image with pre-installed browsers, enabling consistent runs across environments via docker-compose. Two services are available: full test suite and smoke-only tests with profiles. The CI/CD pipeline runs on GitHub Actions with two workflows: PR/push triggers smoke tests in Docker, while full test suite runs on-demand via workflow_dispatch. Test results are published with JUnit reports, HTML artifacts, and GitHub PR annotations using the publish-unit-test-result-action. Allure reporting generates detailed, interactive test reports with step breakdowns and attachments. The project includes comprehensive documentation in README.md and DOCKER.md, ESLint/Prettier configuration for code quality, and accessibility testing support via axe-core integration.
 
 ## Features
 
@@ -171,16 +171,19 @@ ABOUT_URL='https://saucelabs.com/'
 
 ## CI/CD
 
-GitHub Actions workflow (`.github/workflows/playwright.yml`) runs tests on every push/PR to `main` branch:
+GitHub Actions workflow.
 
 1. Checks out code
 2. Sets up Node.js 24
 3. Installs dependencies with `npm ci`
 4. Installs Playwright browsers with OS dependencies
-5. Runs all tests with required environment variables
+5. Runs all containerized tests with required environment variables
 6. Generates test annotations and summaries using GitHub reporter
 7. Uploads HTML test reports as artifacts 
 8. Uploads JUnit XML reports as artifacts
+
+- (`/.github/workflows/pr-check.yml`) runs smoke tests on every push/PR to `main` branch
+- (`/.github/workflows/full-tests.yml`) runs all tests on demand
 
 ## Reports
 
